@@ -1,0 +1,28 @@
+import { PersonalDetails } from "@/types";
+
+export const personalData: PersonalDetails = {
+  name: "SATYAPRADIP DAS",
+  role: "FULL STACK & AI ENGINEER",
+  tagline:
+    "Building scalable web applications, AI-powered products and backend systems focused on performance, security and user experience.",
+  bio: "I'm a Full Stack Developer and AI enthusiast who enjoys building production-ready web applications with clean architecture, secure APIs and modern user experiences.",
+  currently: [
+    "Full Stack Intern @ The Corporate Pot",
+    "B.Tech CSE (AI & ML) @ Brainware University",
+    "Building production AI products with LLMs & Gemini API",
+    "Learning Advanced Backend Architecture & System Design",
+  ],
+  stats: {
+    experienceYears: "1+",
+    projectsCompleted: "15+",
+    technologiesCount: "30+",
+    cgpa: "9.29",
+  },
+  contact: {
+    email: "satyapradip.das@example.com",
+    github: "https://github.com/satyapradip",
+    linkedin: "https://linkedin.com/in/satyapradip",
+    location: "Kolkata, India",
+    resumeUrl: "/resume.pdf",
+  },
+};

@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { montserrat, workSans } from "@/lib/fonts";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "Portfolio Application",
+  title: "SATYAPRADIP | Portfolio",
+  description:
+    "Portfolio of Satyapradip Das, Full-Stack Developer & AI-ML Engineer specializing in MERN stack, AWS, scalable web applications, and Machine Learning integrations.",
+  keywords: [
+    "Satyapradip Das",
+    "Full-Stack Developer",
+    "AI-ML Engineer",
+    "MERN Stack",
+    "React",
+    "Node.js",
+    "Python",
+    "Portfolio",
+  ],
+  authors: [{ name: "Satyapradip Das" }],
 };
 
 export default function RootLayout({
@@ -25,9 +27,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${workSans.variable} h-full antialiased scroll-smooth`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col font-sans text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+        {children}
+      </body>
     </html>
   );
 }

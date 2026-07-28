@@ -1,184 +1,110 @@
 # Implementation Phases
 
-## Satyapradip Das — Portfolio Website
+## Satyapradip Das — Portfolio Website & Admin Management Portal
 
 ---
 
 ## Overview
 
-The build is organized into **6 phases**, each producing a deployable increment. No phase should take more than a single focused session. Each phase builds on the previous one.
+The project is organized into **9 phases**, producing deployable increments. Phases 1–5 (Foundation, Layout, Content Sections, Contact & UI Polish) are fully completed along with responsive scaling and the side-scrolling project drawer. Phases 7–9 focus on the Admin Management Portal, NextAuth authentication, and dynamic DB storage.
 
 ---
 
-## Phase 1: Foundation & Design System
-
-**Goal:** Set up the design tokens, fonts, global styles, and shared components.
-
-### Tasks
-
-- [ ] Update `globals.css` with the warm beige color palette (replace zinc theme)
-- [ ] Configure `@theme inline` with new design tokens
-- [ ] Set up Google Fonts in `layout.tsx` (Space Grotesk, Inter, Cormorant Garamond)
-- [ ] Create `constants/` directory with all data files:
-  - `personal.ts` — name, title, bio, social links
-  - `projects.ts` — project data
-  - `skills.ts` — skill categories
-  - `experience.ts` — work entries
-  - `education.ts` — education details
-  - `certifications.ts` — cert entries
-  - `achievements.ts` — achievement data
-  - `techStack.ts` — tech ribbon items
-- [ ] Create `types/index.ts` — shared TypeScript interfaces
-- [ ] Create `lib/fonts.ts` — font loader exports
-- [ ] Create `SectionHeading` shared component
-- [ ] Create `RevealOnScroll` shared component (Framer Motion)
-- [ ] Verify the design tokens render correctly
-
-### Deliverable
-Blank page with correct fonts, colors, and the design system wired up. Constants files populated with real data.
+## Phase 1: Foundation & Design System — [x] COMPLETED
+- [x] Update `globals.css` with warm beige color palette & neo-brutalist utilities
+- [x] Configure `@theme inline` with design tokens
+- [x] Set up Google Fonts in `layout.tsx` (Space Grotesk, Montserrat, Work Sans)
+- [x] Create `constants/` directory with static fallback data files
+- [x] Create `types/index.ts` — shared TypeScript interfaces
+- [x] Create `lib/fonts.ts` — font loader exports
+- [x] Create `SectionHeading` & `RevealOnScroll` shared components
 
 ---
 
-## Phase 2: Layout & Hero
-
-**Goal:** Build the Navbar, Hero section, and Footer — the first and last things a visitor sees.
-
-### Tasks
-
-- [ ] Build `Navbar` — sticky, blur backdrop, section links, mobile hamburger (shadcn Sheet)
-- [ ] Build `Hero` — two-column layout:
-  - Left: name, title, tagline, CTA buttons
-  - Right: professional photo placeholder
-  - Bottom: stats row with `AnimatedCounter`
-- [ ] Build `Footer` — tech badges, copyright, social links
-- [ ] Wire up smooth scrolling (install Lenis)
-- [ ] Add scroll progress indicator to Navbar
-- [ ] Implement `MagneticButton` for CTAs
-- [ ] Add hero text entrance animations (Framer Motion, staggered)
-- [ ] Test responsive layout (desktop → tablet → mobile)
-
-### Deliverable
-Full hero experience with navigation. Site looks "real" at first glance.
+## Phase 2: Layout & Hero — [x] COMPLETED
+- [x] Build `Navbar` — sticky nav with section anchors, Resume button & mobile drawer
+- [x] Build `Hero` — 2-column layout with photo container, availability status pill, Resume CTA & stats row
+- [x] Build `Footer` — tech badges, copyright, social links & discreet Admin Portal link
+- [x] Wire up smooth scrolling & entrance animations
 
 ---
 
-## Phase 3: Content Sections (Part 1)
-
-**Goal:** Build the content-heavy middle sections: Tech Stack, About, Skills, Experience.
-
-### Tasks
-
-- [ ] Build `TechStack` ribbon — infinite horizontal scroll, grouped by category
-- [ ] Build `About` — "WHO I AM" with checklist items
-- [ ] Build `Skills` — large category cards with hover tilt animation:
-  - Backend · Frontend · AI · Database · Developer Tools
-- [ ] Build `Experience` — vertical timeline with checkmark bullets
-  - The Corporate Pot entry with "Read Case Study →" link
-- [ ] Add `RevealOnScroll` to all sections
-- [ ] Add `CardTilt` hover effect to skill cards
-- [ ] Test section spacing and visual rhythm
-
-### Deliverable
-Scrollable page with 4 fully built content sections. Animations trigger on scroll.
+## Phase 3: Content Sections (Part 1) — [x] COMPLETED
+- [x] Build `TechStack` ribbon marquee
+- [x] Build `About` — "WHO I AM" section with current focus checklist & animated counters
+- [x] Build `Skills` — category cards with hover tilt effects
+- [x] Build `Experience` — vertical timeline with quantified impact metrics (35% latency reduction, 5k+ records)
 
 ---
 
-## Phase 4: Content Sections (Part 2)
-
-**Goal:** Build the remaining content sections: Projects, Process, Education, Certs, Achievements, GitHub.
-
-### Tasks
-
-- [ ] Build `Projects` — 3 large featured project cards:
-  - Employee Management System (enterprise styled)
-  - ApnaDoctor (AI badge prominent, laptop mockup)
-  - Maya Voice AI (dark themed card variant)
-  - Each card: screenshot, tech badges, action buttons, feature tags
-- [ ] Generate project screenshot images (use `generate_image` tool)
-- [ ] Build `Process` — numbered vertical flow (01→06)
-- [ ] Build `Education` — large card with CGPA highlight
-- [ ] Build `Certifications` — card grid
-- [ ] Build `Achievements` — visual stat cards (TOP 10%, hackathon badges)
-- [ ] Build `GitHubStats` — animated counter grid (350+ commits, etc.)
-- [ ] Add `RevealOnScroll` to all new sections
-
-### Deliverable
-Complete page with all 14 sections. Full scroll experience.
+## Phase 4: Content Sections (Part 2) — [x] COMPLETED
+- [x] Build `Projects` — featured project cards with technical architecture badges
+- [x] Build `Process` — numbered vertical flow (01→06)
+- [x] Build `Education` — university & 9.29 CGPA highlight card
+- [x] Build `Certifications` — verified credential cards
+- [x] Build `Achievements` — honors & hackathon stat cards
+- [x] Build `GitHubStats` — terminal window code activity counters
 
 ---
 
-## Phase 5: Contact, Interactivity & Polish
-
-**Goal:** Wire up the contact form, add advanced animations, polish everything.
-
-### Tasks
-
-- [ ] Build `Contact` — form + social links
-- [ ] Integrate EmailJS or Resend for form submission
-- [ ] Add cursor spotlight effect (GSAP, subtle mouse glow)
-- [ ] Add gradient border animation on featured project cards
-- [ ] Add image reveal animation on project screenshots
-- [ ] Fine-tune all animation timings and easing curves
-- [ ] Add `aria-label` attributes for accessibility
-- [ ] Add keyboard navigation support
-- [ ] Review and polish spacing, alignment, typography across all breakpoints
-- [ ] Add loading states and error handling for contact form
-
-### Deliverable
-Fully interactive, polished portfolio with working contact form.
+## Phase 5: Contact, Interactivity & Polish — [x] COMPLETED
+- [x] Build `Contact` — form with simulated loading state & email copy-to-clipboard button
+- [x] Add ambient multi-stop `CursorSpotlight` mouse tracking glow
+- [x] Add keyboard `:focus-visible` accessibility focus outlines in `globals.css`
+- [x] Add `aria-label` and `htmlFor` accessibility attributes across all interactive elements
+- [x] Standardize responsive container width (`w-full max-w-[1440px]`) & padding across all 12 sections
+- [x] Enforce global `cursor: pointer !important` across all buttons, links, and cards
+- [x] Resolve backend `ts-node-dev` compatibility error by upgrading to `tsx watch` with Windows DNS override
 
 ---
 
-## Phase 6: SEO, Performance & Deployment
-
-**Goal:** Optimize for production. Ship it.
-
-### Tasks
-
-- [ ] Add comprehensive metadata in `layout.tsx`:
-  - Title, description, keywords
-  - Open Graph tags (og:image, og:title, og:description)
-  - Twitter Card tags
-  - Canonical URL
-- [ ] Generate and add `og-image.png` (social preview)
+## Phase 6: SEO, Performance & Deployment — [x] IN PROGRESS
+- [ ] Add comprehensive metadata in `layout.tsx` (OG tags, Twitter Card)
 - [ ] Add `robots.txt` and `sitemap.xml`
 - [ ] Add structured data (JSON-LD Person schema)
-- [ ] Run Lighthouse audit — target 90+ on all metrics
-- [ ] Optimize images (ensure all use `next/image`)
-- [ ] Lazy load below-the-fold sections
-- [ ] Dynamic import GSAP (only loaded for hero)
-- [ ] Add Vercel Analytics snippet
-- [ ] Final cross-browser testing (Chrome, Firefox, Safari, Edge)
-- [ ] Final mobile testing (different viewport sizes)
+- [ ] Optimize images with `next/image`
 - [ ] Deploy to Vercel
-- [ ] Verify production build
-
-### Deliverable
-Production-deployed portfolio at a custom domain, fully optimized.
 
 ---
 
-## Dependencies to Install (by Phase)
-
-| Phase | Packages |
-|---|---|
-| 1 | (none — fonts via next/font, shadcn already installed) |
-| 2 | `framer-motion`, `lenis` |
-| 3 | (none) |
-| 4 | `react-icons` (for brand logos) |
-| 5 | `emailjs-com` or `resend`, `gsap` |
-| 6 | `@vercel/analytics` |
+## Phase 7: Admin Authentication & Database Infrastructure — [ ] NEXT
+- [ ] Install `next-auth`, `@prisma/client`, `prisma`
+- [ ] Configure `NextAuth` handler supporting Credentials (email/password) & GitHub OAuth in `app/api/auth/[...nextauth]/route.ts`
+- [ ] Set up database models in `prisma/schema.prisma` (User, Profile, Project, Skill, Experience, Education, Certification)
+- [ ] Build `/admin/login` page matching Neo-Brutalist theme with error handling & loading states
+- [ ] Create `lib/auth.ts` session helper & protective API route middleware
 
 ---
 
-## Timeline Estimate
+## Phase 8: Admin Dashboard UI & Content Management Modules — [ ] PENDING
+- [ ] Build Admin Layout in `app/admin/layout.tsx` (Dark sidebar, search header, user profile pill)
+- [ ] Build Admin Dashboard in `app/admin/dashboard/page.tsx`:
+  - Metric summary cards (Total Projects, Skills, Exp Entries, Commits)
+  - Quick Actions bar (Add Project, Update Resume, View Public Site)
+  - System Health progress meters
+- [ ] Build **Profile Manager** (`app/admin/dashboard/profile/page.tsx`): Update profile photo URL, bio, tagline
+- [ ] Build **Skills Manager** (`app/admin/dashboard/skills/page.tsx`): Add/remove skills per category
+- [ ] Build **Experience Manager** (`app/admin/dashboard/experience/page.tsx`): Add/edit/delete work experience records
+- [ ] Build **Project Manager** (`app/admin/dashboard/projects/page.tsx`): Add/edit/delete projects, tech badges, links, images, and `featured` toggle
+- [ ] Build **Academic & Certs Manager** (`app/admin/dashboard/academic/page.tsx`): Add/remove education & certification entries
 
-| Phase | Effort |
-|---|---|
-| Phase 1 | ~2 hours |
-| Phase 2 | ~3 hours |
-| Phase 3 | ~3 hours |
-| Phase 4 | ~4 hours |
-| Phase 5 | ~3 hours |
-| Phase 6 | ~2 hours |
-| **Total** | **~17 hours** |
+---
+
+## Phase 9: Dynamic Portfolio Integration & "View All Projects" Gallery — [ ] PARTIALLY COMPLETED
+- [x] Build `AllProjectsDrawer.tsx` side-scrolling gallery displaying all non-featured projects
+- [x] Add "View All Projects" trigger button to main `Projects` section
+- [x] Add category filter pills (ALL, FULL-STACK, AI/ML, DEVOPS, PRODUCTIVITY)
+- [ ] Build `lib/data.ts` unified data fetcher (DB queries with `constants/` fallback)
+- [ ] Connect public site sections (`Projects`, `Skills`, `Experience`, `Education`, `Certifications`) to dynamic database API fetcher
+
+---
+
+## Timeline & Effort
+
+| Phase | Scope | Status |
+|---|---|---|
+| Phase 1–5 | Foundation, Layout, Content, Polish & Side-Scroll Gallery | Completed |
+| Phase 6 | SEO & Production Readiness | In Progress |
+| Phase 7 | Admin Auth & DB Setup | Next |
+| Phase 8 | Admin Dashboard & Managers | Pending |
+| Phase 9 | Dynamic Data Sync | Pending |

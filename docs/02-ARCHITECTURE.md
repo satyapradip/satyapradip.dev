@@ -1,226 +1,207 @@
-# Architecture
+# Architecture Document
 
-## Satyapradip Das — Portfolio Website
+## Satyapradip Das — Portfolio Website & Admin Management Portal
 
 ---
 
 ## 1. High-Level Architecture
 
 ```
-┌──────────────────────────────────────────────────────┐
-│                     VERCEL (CDN)                     │
-│                                                      │
-│  ┌────────────────────────────────────────────────┐  │
-│  │              Next.js 16 (App Router)           │  │
-│  │                                                │  │
-│  │  ┌──────────┐  ┌──────────┐  ┌─────────────┐  │  │
-│  │  │  Pages   │  │Components│  │   Hooks      │  │  │
-│  │  │  (RSC)   │  │  (Client)│  │   (Client)   │  │  │
-│  │  └────┬─────┘  └────┬─────┘  └──────┬──────┘  │  │
-│  │       │              │               │         │  │
-│  │  ┌────┴──────────────┴───────────────┴──────┐  │  │
-│  │  │            Shared Libraries              │  │  │
-│  │  │  constants/ · lib/ · types/              │  │  │
-│  │  └─────────────────────────────────────────-┘  │  │
-│  └────────────────────────────────────────────────┘  │
-│                                                      │
-│  External Services:                                  │
-│  ├── EmailJS / Resend (contact form)                 │
-│  ├── Vercel Analytics                                │
-│  └── Cloudinary (images, optional)                   │
-│                                                      │
-│  Backend (future admin panel):                       │
-│  ├── Express + MongoDB (existing /backend)           │
-│  └── REST API for dynamic content management         │
-└──────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│                          VERCEL HOSTING / EDGE                         │
+│                                                                        │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │                    Next.js 16 (App Router)                       │  │
+│  │                                                                  │  │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────┐  │  │
+│  │  │ Public Pages │  │ Admin Pages  │  │ NextAuth / API Routes  │  │  │
+│  │  │ (RSC/Client) │  │  (/admin/*)  │  │     (/api/admin/*)     │  │  │
+│  │  └──────┬───────┘  └──────┬───────┘  └───────────┬────────────┘  │  │
+│  │         │                 │                      │               │  │
+│  │  ┌──────┴─────────────────┴──────────────────────┴────────────┐  │  │
+│  │  │                Data Layer & Fallback Engine                 │  │  │
+│  │  │    Prisma ORM / Mongo API  <--->  constants/ Fallback Data   │  │  │
+│  │  └────────────────────────────────────────────────────────────┘  │  │
+│  └──────────────────────────────────────────────────────────────────┘  │
+│                                                                        │
+│  External Services:                                                    │
+│  ├── NextAuth (Credentials + GitHub OAuth)                             │
+│  ├── MongoDB Atlas / Prisma ORM (persistent database storage)          │
+│  ├── Cloudinary / Next Image (image storage & optimization)            │
+│  └── Vercel Analytics                                                  │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 2. Frontend Architecture
-
-### 2.1 Framework: Next.js 16 (App Router)
-
-- **React Server Components (RSC)** for static content (hero, about, education)
-- **Client Components** only where interactivity is needed (animations, forms, scroll tracking)
-- **Static Site Generation (SSG)** — the portfolio is entirely static at build time
-- No API routes needed for the public site (contact form uses client-side EmailJS)
-
-### 2.2 Directory Structure
+## 2. Directory Structure
 
 ```
 frontend/src/
 ├── app/
-│   ├── layout.tsx              # Root layout (fonts, metadata, providers)
-│   ├── page.tsx                # Home page (composes all sections)
-│   ├── globals.css             # Design tokens + Tailwind v4 theme
-│   └── favicon.ico
+│   ├── layout.tsx                # Root layout (fonts, metadata, SessionProvider)
+│   ├── page.tsx                  # Public landing page (12 sections + CursorSpotlight)
+│   ├── globals.css               # Design tokens, brutalist utilities, focus styles
+│   │
+│   ├── admin/                    # Admin Management Portal
+│   │   ├── login/
+│   │   │   └── page.tsx          # Login page (Credentials + GitHub OAuth)
+│   │   ├── dashboard/
+│   │   │   ├── page.tsx          # Dashboard overview & stats widgets
+│   │   │   ├── profile/page.tsx  # Profile & Photo Manager
+│   │   │   ├── projects/page.tsx # Projects CRUD & Featured toggle
+│   │   │   ├── skills/page.tsx   # Skills Manager
+│   │   │   ├── experience/page.tsx # Work Experience Manager
+│   │   │   └── academic/page.tsx   # Education & Certifications Manager
+│   │   └── layout.tsx            # Admin sidebar & header layout
+│   │
+│   └── api/                      # Next.js API Routes & NextAuth
+│       ├── auth/
+│       │   └── [...nextauth]/route.ts # NextAuth handler (Credentials + GitHub)
+│       └── admin/
+│           ├── profile/route.ts   # GET / PUT profile info & image
+│           ├── projects/route.ts  # GET / POST / PUT / DELETE projects
+│           ├── skills/route.ts    # GET / POST / DELETE skills
+│           ├── experience/route.ts# GET / POST / PUT / DELETE experience
+│           ├── academic/route.ts  # GET / POST / DELETE education
+│           └── certs/route.ts     # GET / POST / DELETE certifications
 │
 ├── components/
-│   ├── ui/                     # shadcn/ui primitives (Button, Card, etc.)
+│   ├── ui/                       # shadcn/ui primitives
 │   ├── layout/
-│   │   ├── Navbar.tsx          # Sticky nav with scroll progress
-│   │   └── Footer.tsx          # Built-with badges, copyright
+│   │   ├── Navbar.tsx            # Navigation bar
+│   │   ├── Footer.tsx            # Footer with Admin link
+│   │   └── AdminSidebar.tsx      # Admin dashboard dark sidebar navigation
+│   ├── admin/                    # Admin dashboard UI components
+│   │   ├── StatCard.tsx          # Metric cards (Total Projects, Skills, Commits)
+│   │   ├── QuickActions.tsx      # Quick action buttons (Add Project, Resume, Public Site)
+│   │   ├── SystemHealth.tsx      # Server & Storage health meters
+│   │   └── ProjectFormModal.tsx  # Project Add/Edit dialog modal
 │   ├── sections/
-│   │   ├── Hero.tsx            # Hero with photo, stats, CTAs
-│   │   ├── TechStack.tsx       # Infinite scrolling ribbon
-│   │   ├── About.tsx           # Who I am + currently doing
-│   │   ├── Skills.tsx          # Large skill category cards
-│   │   ├── Experience.tsx      # Vertical timeline
-│   │   ├── Projects.tsx        # 3 featured project cards
-│   │   ├── Process.tsx         # Engineering process flow
-│   │   ├── Education.tsx       # University + CGPA card
-│   │   ├── Certifications.tsx  # Cert cards grid
-│   │   ├── Achievements.tsx    # Stat highlight cards
-│   │   ├── GitHubStats.tsx     # Animated counters
-│   │   └── Contact.tsx         # Form + social links
+│   │   ├── Hero.tsx
+│   │   ├── Projects.tsx          # Featured 3-4 project cards + "View All Projects" CTA
+│   │   ├── AllProjectsDrawer.tsx # Side-scrolling drawer displaying all projects
+│   │   └── ... (all 12 content sections)
 │   └── shared/
-│       ├── SectionHeading.tsx  # Reusable section title (Cormorant Garamond)
-│       ├── AnimatedCounter.tsx # Number counting animation
-│       ├── RevealOnScroll.tsx  # Fade-up intersection observer wrapper
-│       ├── MagneticButton.tsx  # Magnetic hover effect button
-│       └── CardTilt.tsx        # 3D tilt effect wrapper
-│
-├── hooks/
-│   ├── useScrollProgress.ts   # Track page scroll percentage
-│   ├── useInView.ts           # Intersection observer hook
-│   ├── useMediaQuery.ts       # Responsive breakpoint hook
-│   └── useMagneticEffect.ts   # Mouse-follow magnetic effect
+│       ├── CursorSpotlight.tsx   # Ambient mouse glow
+│       ├── AnimatedCounter.tsx   # Number counting animation
+│       └── RevealOnScroll.tsx    # Intersection observer wrapper
 │
 ├── lib/
-│   ├── utils.ts               # cn() helper (already exists)
-│   ├── fonts.ts               # Google Font loaders
-│   └── email.ts               # EmailJS / Resend client
+│   ├── auth.ts                   # NextAuth options & security helpers
+│   ├── prisma.ts                 # Prisma DB client ORM connection
+│   ├── data.ts                   # Unified data fetcher (API with SSG constants fallback)
+│   └── utils.ts                  # cn() helper
 │
-├── constants/
-│   ├── personal.ts            # Name, title, bio, social links
-│   ├── projects.ts            # Project data (title, desc, tech, links)
-│   ├── skills.ts              # Skill categories and items
-│   ├── experience.ts          # Work experience entries
-│   ├── education.ts           # Education details
-│   ├── certifications.ts      # Certification entries
-│   ├── achievements.ts        # Achievement data
-│   └── techStack.ts           # Tech stack items for ribbon
+├── constants/                    # Fallback static data files
+│   ├── personal.ts
+│   ├── projects.ts
+│   ├── skills.ts
+│   ├── experience.ts
+│   ├── education.ts
+│   ├── certifications.ts
+│   └── achievements.ts
 │
-├── types/
-│   └── index.ts               # TypeScript interfaces
-│
-└── public/
-    ├── assets/
-    │   ├── images/             # Project screenshots, profile photo
-    │   └── icons/              # Custom SVG icons if needed
-    ├── resume.pdf              # Downloadable resume
-    └── og-image.png            # Open Graph social preview
-```
-
-### 2.3 Rendering Strategy
-
-| Section | Rendering | Reason |
-|---|---|---|
-| Navbar | Client | Scroll tracking, mobile menu state |
-| Hero | Server + Client | Static text (RSC), animated counters (Client) |
-| TechStack | Client | Infinite scroll animation |
-| About | Server | Fully static content |
-| Skills | Client | Hover/tilt animations |
-| Experience | Client | Scroll-reveal animations |
-| Projects | Client | Hover effects, image interactions |
-| Process | Client | Scroll-reveal animations |
-| Education | Server | Fully static |
-| Certifications | Server | Fully static |
-| Achievements | Client | Animated counters |
-| GitHub Stats | Client | Animated counters |
-| Contact | Client | Form state + submission |
-| Footer | Server | Fully static |
-
-### 2.4 Animation Architecture
-
-```
-Animation Layer
-├── Framer Motion (primary)
-│   ├── Page transitions
-│   ├── Scroll-triggered reveals (fade-up, slide-left)
-│   ├── Staggered children
-│   ├── Layout animations
-│   └── AnimatePresence for mount/unmount
-│
-├── GSAP (hero only)
-│   ├── Hero text split animation
-│   ├── Magnetic button effect
-│   └── Cursor spotlight
-│
-└── CSS (micro-interactions)
-    ├── Hover states
-    ├── Gradient borders
-    ├── Card tilt (transform perspective)
-    └── Smooth scrolling (Lenis)
+└── types/
+    └── index.ts                  # Shared TypeScript interfaces
 ```
 
 ---
 
-## 3. Backend Architecture (Existing — Future Admin Panel)
+## 3. Database Schema (Prisma / MongoDB)
 
-The existing backend at `/backend` uses:
+```prisma
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String?  // Hashed password for Credentials login
+  name      String?
+  image     String?
+  createdAt DateTime @default(now())
+}
 
-- **Express 5** + **TypeScript**
-- **MongoDB** via Mongoose 9
-- **JWT** authentication + **bcrypt**
-- **Helmet** + **CORS** + **Rate Limiting** for security
-- **Cloudinary** for image uploads
-- **Zod** for validation
+model Profile {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  role        String
+  tagline     String
+  bio         String
+  photoUrl    String
+  resumeUrl   String
+  updatedAt   DateTime @updatedAt
+}
 
-This backend is reserved for a **future admin panel** to manage portfolio content dynamically. The public-facing portfolio will be statically generated.
+model Project {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  subtitle     String
+  description  String
+  badge        String?
+  techStack    String[]
+  features     String[]
+  liveUrl      String?
+  githubUrl    String?
+  imageUrl     String?
+  featured     Boolean  @default(false)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+}
 
----
+model SkillCategory {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  iconName  String
+  skills    String[]
+}
 
-## 4. Data Flow
+model Experience {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  year         String
+  company      String
+  role         String
+  location     String
+  highlights   String[]
+  techStack    String[]
+  caseStudyUrl String?
+}
 
+model Education {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  institution String
+  degree      String
+  cgpa        String
+  period      String
+  highlights  String[]
+}
+
+model Certification {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  issuer        String
+  credentialUrl String?
+}
 ```
-┌─────────────┐
-│  constants/  │  Static data (TypeScript objects)
-└──────┬──────┘
-       │ import
-       ▼
-┌─────────────┐
-│  Sections    │  Server Components read constants directly
-│  (RSC)       │  Client Components receive via props
-└──────┬──────┘
-       │ render
-       ▼
-┌─────────────┐
-│  HTML (SSG)  │  Pre-rendered at build time
-└──────┬──────┘
-       │ deploy
-       ▼
-┌─────────────┐
-│   Vercel     │  CDN-served static files
-│   Edge       │
-└─────────────┘
-```
 
 ---
 
-## 5. Key Technical Decisions
+## 4. API Endpoints & Security Architecture
 
-| Decision | Choice | Rationale |
-|---|---|---|
-| **Rendering** | SSG (Static) | Portfolio content is static; fastest possible load |
-| **Styling** | Tailwind CSS v4 + CSS variables | Already configured; v4's `@theme` for design tokens |
-| **Components** | shadcn/ui (New York) | Already installed; consistent, accessible primitives |
-| **Animation** | Framer Motion + GSAP | FM for general animations; GSAP for hero-level effects |
-| **Scrolling** | Lenis | Smooth, buttery scrolling experience |
-| **Fonts** | next/font (Google) | Zero-CLS font loading |
-| **Contact** | EmailJS (client-side) | No server needed; simple integration |
-| **Deployment** | Vercel | Zero-config Next.js deployment |
-| **Data** | TypeScript constants | Type-safe, no API latency, zero runtime cost |
+| Endpoint | Method | Protection | Description |
+|---|---|---|---|
+| `/api/auth/[...nextauth]` | ALL | Public | NextAuth Credentials & GitHub OAuth handler |
+| `/api/admin/profile` | GET / PUT | Admin Session | Fetch / update profile details & image |
+| `/api/admin/projects` | GET / POST / PUT / DELETE | Admin Session | CRUD operations on projects & featured toggle |
+| `/api/admin/skills` | GET / POST / DELETE | Admin Session | Add or remove skill items per category |
+| `/api/admin/experience` | GET / POST / PUT / DELETE | Admin Session | CRUD operations on work experience |
+| `/api/admin/education` | GET / POST / DELETE | Admin Session | CRUD operations on academic background |
+| `/api/admin/certs` | GET / POST / DELETE | Admin Session | CRUD operations on certifications |
 
 ---
 
-## 6. Performance Strategy
+## 5. Resilient Data Fallback Strategy
 
-1. **next/font** — self-hosted Google Fonts with zero layout shift
-2. **next/image** — automatic WebP/AVIF, lazy loading, responsive srcsets
-3. **React Server Components** — zero JS bundle for static sections
-4. **Dynamic imports** — `lazy()` for heavy animation libraries (GSAP)
-5. **Intersection Observer** — animations only trigger when in viewport
-6. **CSS containment** — `contain: layout` on section wrappers
-7. **Vercel Edge** — global CDN with automatic caching
+To ensure zero downtime and ultra-fast page loads:
+1. Public page components invoke `getPortfolioData()`.
+2. `getPortfolioData()` attempts to query the database API endpoint.
+3. If the database query succeeds, dynamic records are rendered.
+4. If database connection is unreachable or offline during local dev/build, it gracefully falls back to the static files in [`constants/`](file:///e:/portfolio/frontend/src/constants).

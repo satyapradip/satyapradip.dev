@@ -1,6 +1,8 @@
-# Development Rules
+# Project Rules & Behavioral Guidelines
 
-## Satyapradip Das — Portfolio Website
+## Satyapradip Das — Portfolio Website & Admin Management Portal
+
+---
 
 ## 0. Agent Workflow Protocol
 
@@ -21,178 +23,69 @@ All work strictly follows the **Multi-Agent Review & Verification Pipeline**:
 
 ### TypeScript
 - **Strict mode** enabled — no `any`, no implicit returns
-- All props must have explicit interfaces (not inline types)
+- All props must have explicit interfaces in `src/types/index.ts`
 - Use `type` for data shapes, `interface` for component props
 - Prefer `const` assertions for static data: `as const`
 - No `enum` — use `const` objects or union types instead
 
 ### React / Next.js
 - **Server Components by default** — only add `"use client"` when necessary
-- Extract client interactivity into small client components, keep parents as RSC
+- Extract client interactivity into small client components
 - Use `next/image` for all images — never raw `<img>`
 - Use `next/font` for all fonts — never `<link>` tags
 - Use `next/link` for internal navigation
-- No `useEffect` for data fetching — use RSC or `use()`
-- Prefer composition over prop drilling (children pattern)
 
-### File Naming
-- Components: `PascalCase.tsx` (e.g., `Hero.tsx`, `SectionHeading.tsx`)
-- Hooks: `camelCase.ts` with `use` prefix (e.g., `useInView.ts`)
-- Constants: `camelCase.ts` (e.g., `projects.ts`, `skills.ts`)
-- Types: `index.ts` in `types/` directory
-- Utilities: `camelCase.ts` (e.g., `utils.ts`, `fonts.ts`)
-
-### Imports
+### File Naming & Imports
+- Components: `PascalCase.tsx`
+- Hooks & Utilities: `camelCase.ts`
 - Use `@/` path aliases — never relative paths like `../../`
-- Group imports: React → Next → External → Internal → Types → Styles
-- No unused imports
 
 ---
 
-## 2. Styling Rules
+## 2. Styling Rules (Tailwind CSS v4 & Neo-Brutalist System)
 
-### Tailwind CSS v4
-- Use Tailwind utility classes exclusively — no inline `style` props unless absolutely necessary
-- Use CSS variables via `@theme inline` in `globals.css` for design tokens
-- Never hardcode colors — always reference design tokens (e.g., `text-primary`, `bg-background`)
-- Use responsive prefixes: `sm:`, `md:`, `lg:`, `xl:`
-- Use `cn()` utility from `lib/utils.ts` for conditional classes
-
-### Component Styling
-- No CSS modules — Tailwind only
-- No `styled-components` or `emotion`
-- Complex animations use Framer Motion `motion` components
-- Micro-interactions use Tailwind `transition-*` and `hover:` classes
-- Keep class strings readable — break long class lists across lines
-
-### Design Token Usage
-```
-✓ bg-background        ✗ bg-[#F8F4EE]
-✓ text-primary          ✗ text-[#151515]
-✓ border-border         ✗ border-[#E6DDD2]
-✓ text-accent           ✗ text-[#C88A3D]
-```
+- Use Tailwind utility classes exclusively — no inline `style` props unless dynamic (e.g., cursor coordinates)
+- Use design tokens from `@theme inline` in `globals.css`
+- Standard Neo-Brutalist elements:
+  - 3px solid dark borders (`#151b29` / `border-on-surface`)
+  - Hard offset box shadows (`box-shadow: 6px 6px 0px #151b29` or `4px 4px 0px #151b29`)
+  - Accent colors: Gold (`#f5a623`), Cyan (`#61f4fd`), Crimson (`#bd0041`)
+- Keyboard Accessibility: Focus outline (`:focus-visible`) must be visible on all interactive elements.
 
 ---
 
-## 3. Component Rules
+## 3. Admin Panel & NextAuth Security Rules
 
-### Structure
-- One component per file
-- Keep components under 150 lines — extract sub-components if larger
-- Colocate component-specific types at the top of the file
-- Export components as named exports (not default) from section components
-- `page.tsx` is the only default export
+1. **Strict Route Protection:**
+   - Every API route under `/api/admin/*` MUST perform session verification using `getServerSession(authOptions)`.
+   - Unauthenticated API requests MUST return HTTP `401 Unauthorized`.
+   - Accessing `/admin/dashboard/*` without a session MUST redirect to `/admin/login`.
 
-### shadcn/ui
-- Use shadcn components for all primitives: `Button`, `Card`, `Input`, `Sheet`, `Dialog`, `Avatar`, `DropdownMenu`
-- Don't rebuild what shadcn already provides
-- Extend shadcn components via `className` prop — don't fork them
-- Follow the New York style variant (already configured)
+2. **Credential Safety & Environment Configuration:**
+   - Admin passwords must be hashed using `bcrypt`. Never store plaintext credentials.
+   - Secrets (`NEXTAUTH_SECRET`, `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `DATABASE_URL`) loaded from `.env`.
 
-### Shared Components
-- `SectionHeading` — every section title goes through this
-- `RevealOnScroll` — wrap all section content for scroll animations
-- `AnimatedCounter` — all stat numbers use this
-- `CardTilt` — all hoverable cards use this
-- `MagneticButton` — hero CTAs use this
+3. **Featured Projects Constraint Rule:**
+   - The public landing page displays **3 to 4 featured projects**.
+   - Toggling `featured: true` on a project when 4 are featured prompts the user or un-features the oldest entry.
+
+4. **Resilient Data Fallback Strategy:**
+   - Public rendering MUST NEVER crash if database connection fails.
+   - Dynamic data fetchers in `src/lib/data.ts` MUST wrap queries in `try/catch` and fall back to static records in `src/constants/`.
 
 ---
 
-## 4. Animation Rules
+## 4. Animation & Interaction Rules
 
-### Principles
-- **Smooth, not flashy** — every animation should feel intentional
-- **60fps minimum** — use `transform` and `opacity` only (GPU-accelerated)
-- **Respect `prefers-reduced-motion`** — disable all animations for users who prefer it
-- **Once only** — scroll-triggered animations fire once, never re-trigger
-- **Quick** — most animations 300-600ms, never exceed 1s
-
-### Motion Values
-```
-Default ease:     [0.25, 0.46, 0.45, 0.94]  (ease-out-quad)
-Spring:           { stiffness: 100, damping: 15 }
-Stagger delay:    0.1s between children
-Scroll threshold: 20% element visibility
-```
-
-### Library Boundaries
-- **Framer Motion** — all scroll reveals, layout animations, presence
-- **GSAP** — hero text only (SplitText, magnetic cursor)
-- **CSS** — hover effects, transitions, infinite scroll ribbon
-- **Lenis** — smooth scroll behavior (global)
-- Never mix animation libraries on the same element
+- **Framer Motion** for scroll reveals, staggered children, and layout transitions.
+- **CSS** for micro-interactions, marquee ribbons, and hover offsets.
+- **Cursor Spotlight**: Disabled on coarse touch pointers for performance.
 
 ---
 
-## 5. Performance Rules
+## 5. Performance & Accessibility Rules
 
-- **No layout shifts** — all images must have explicit `width` and `height`
-- **No render waterfalls** — avoid nested client component suspense boundaries
-- **Lazy load below the fold** — use `dynamic(() => import(...))` for heavy sections
-- **GSAP is hero-only** — dynamically imported, never in the main bundle
-- **Images optimized** — WebP via `next/image`, blur placeholders, responsive sizes
-- **Bundle size awareness** — check `npm run build` output for large pages
-- **No console.log in production** — remove all debug logging before deploy
-
----
-
-## 6. Accessibility Rules
-
-- All images have descriptive `alt` text
-- All buttons and links have `aria-label` when text is not self-explanatory
-- Color contrast meets WCAG AA (4.5:1 for text, 3:1 for large text)
-- Focus states visible on all interactive elements (ring style)
-- Keyboard navigation works for all sections
-- Skip-to-content link at the top
-- Semantic HTML: `<header>`, `<nav>`, `<main>`, `<section>`, `<footer>`
-- Each `<section>` has an `id` for anchor linking and `aria-labelledby`
-
----
-
-## 7. SEO Rules
-
-- Single `<h1>` per page (hero name)
-- Proper heading hierarchy: `h1` → `h2` (sections) → `h3` (cards) → `h4`
-- Descriptive `<title>` tag: "Satyapradip Das — Full Stack & AI Engineer"
-- Meta description under 160 characters
-- Open Graph tags for social sharing
-- All interactive elements have unique `id` attributes
-- Semantic HTML elements throughout
-
----
-
-## 8. Data Rules
-
-- All content lives in `constants/` — **never hardcode text in JSX**
-- Each data file exports a typed array or object
-- Personal info centralized in `personal.ts` — used by Hero, Navbar, Footer, Contact
-- Project data includes all fields: title, description, tech stack, links, features
-- All external URLs stored in constants (social, resume, project links)
-
----
-
-## 9. Git Rules
-
-- Commit after each completed section/component
-- Commit message format: `feat(section): description` or `fix(component): description`
-- Examples:
-  - `feat(hero): add hero section with stats and CTAs`
-  - `feat(skills): add skill category cards with tilt animation`
-  - `fix(navbar): fix mobile menu z-index`
-  - `chore(deps): add framer-motion`
-  - `style(globals): update color palette to warm beige`
-
----
-
-## 10. Testing Checklist (per section)
-
-- [ ] Desktop layout correct (1440px viewport)
-- [ ] Tablet layout correct (768px viewport)
-- [ ] Mobile layout correct (375px viewport)
-- [ ] Animations trigger properly on scroll
-- [ ] Hover effects work on all interactive elements
-- [ ] No console errors
-- [ ] No TypeScript errors
-- [ ] Accessible via keyboard
-- [ ] Text is readable (contrast, size, spacing)
+- All images must have explicit `alt` text.
+- All buttons and links must have `aria-label` when text is not self-explanatory.
+- Color contrast meets WCAG AA standards.
+- Keyboard navigation supported across all public sections and admin management tools.

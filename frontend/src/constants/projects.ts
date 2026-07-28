@@ -60,4 +60,72 @@ export const projectsData: Project[] = [
     caseStudyUrl: "#case-study-maya",
     variant: "dark",
   },
+  {
+    id: "cloud-metrics-dashboard",
+    title: "Cloud Infrastructure Monitor",
+    subtitle: "Real-Time Systems Telemetry",
+    description:
+      "Distributed telemetry dashboard monitoring server memory, CPU spikes, and microservice container health using WebSocket pipelines.",
+    badge: "DevOps & Cloud",
+    techStack: ["Node.js", "Docker", "WebSockets", "Chart.js", "Redis"],
+    features: [
+      "Live WebSocket Telemetry",
+      "Alerting Threshold Triggers",
+      "Container Resource Tracking",
+    ],
+    liveUrl: "https://cloud-metrics.vercel.app",
+    githubUrl: "https://github.com/satyapradip/cloud-metrics-monitor",
+    variant: "default",
+  },
+  {
+    id: "nexus-e-commerce",
+    title: "Nexus Storefront",
+    subtitle: "High Performance E-Commerce Engine",
+    description:
+      "Headless e-commerce storefront with server-side rendered product catalogs, dynamic cart state management, and Stripe checkout integration.",
+    badge: "Full-Stack Web",
+    techStack: ["Next.js", "Tailwind CSS", "Stripe", "Prisma", "PostgreSQL"],
+    features: [
+      "Server-Side Catalog Rendering",
+      "Secure Stripe Checkout Pipeline",
+      "Optimized Product Image Delivery",
+    ],
+    liveUrl: "https://nexus-storefront.vercel.app",
+    githubUrl: "https://github.com/satyapradip/nexus-ecommerce",
+    variant: "default",
+  },
+  {
+    id: "ai-code-summarizer",
+    title: "CodeLens AI",
+    subtitle: "Automated Code Review Assistant",
+    description:
+      "Developer productivity CLI tool that analyzes pull request diffs and generates concise, structured code reviews using LLMs.",
+    badge: "AI Tooling",
+    techStack: ["TypeScript", "Node.js", "Gemini 1.5 Pro", "CLI", "Git Hooks"],
+    features: [
+      "Automated Diff Analysis",
+      "Security Flaw Warning Flagging",
+      "Custom Git Hook Integration",
+    ],
+    liveUrl: "https://codelens-ai.vercel.app",
+    githubUrl: "https://github.com/satyapradip/codelens-ai",
+    variant: "default",
+  },
+  {
+    id: "task-matrix-kanban",
+    title: "TaskMatrix Flow",
+    subtitle: "Agile Project Management Board",
+    description:
+      "Interactive drag-and-drop Kanban board supporting subtask decomposition, priority tags, and persistent local/cloud sync.",
+    badge: "Productivity",
+    techStack: ["React", "Zustand", "Tailwind CSS", "Dnd-Kit", "Firebase"],
+    features: [
+      "Smooth Drag-and-Drop Tasks",
+      "Realtime Zustand State Sync",
+      "Custom Tag Filters",
+    ],
+    liveUrl: "https://taskmatrix.vercel.app",
+    githubUrl: "https://github.com/satyapradip/task-matrix-flow",
+    variant: "default",
+  },
 ];

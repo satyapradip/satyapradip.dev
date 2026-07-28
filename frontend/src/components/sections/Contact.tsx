@@ -1,118 +1,226 @@
 "use client";
 
 import React, { useState } from "react";
-import { ArrowUpRight, Mail, Send, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight, Mail, Send, CheckCircle2, Copy, Check, Loader2, AlertCircle, FileText } from "lucide-react";
 import { personalData } from "@/constants/personal";
+import { RevealOnScroll } from "@/components/shared/RevealOnScroll";
 
+/**
+ * Contact Component
+ * 
+ * Provides an interactive contact section featuring:
+ * 1. High-impact banner with direct mail CTA, Resume button & email copy feature
+ * 2. Accessible message form with loading state, validation, and feedback notifications
+ */
 export function Contact() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
 
+  /**
+   * Copies email address to system clipboard with user feedback
+   */
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(personalData.contact.email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
+
+  /**
+   * Form submit handler with simulated async dispatch & validation
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.name && formData.email && formData.message) {
-      setSubmitted(true);
+    setErrorMsg("");
+
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setErrorMsg("Please fill out all required fields.");
+      return;
     }
+
+    if (!formData.email.includes("@") || !formData.email.includes(".")) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+
+    setLoading(true);
+
+    // Simulate async network request
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+      setFormData({ name: "", email: "", message: "" });
+    }, 1200);
   };
 
   return (
     <div id="contact">
       {/* Crimson CTA Banner */}
-      <section className="bg-tertiary py-24 md:py-32 px-5 md:px-20 text-center text-on-tertiary">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="font-display font-black text-5xl sm:text-7xl md:text-[84px] text-on-tertiary leading-none mb-8 uppercase tracking-tighter">
+      <section className="bg-tertiary py-20 md:py-28 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 text-center text-on-tertiary">
+        <RevealOnScroll direction="up" className="w-full max-w-[1440px] mx-auto">
+          <h2 className="font-display font-black text-4xl sm:text-6xl md:text-[80px] text-on-tertiary leading-none mb-6 uppercase tracking-tighter">
             READY TO<br />BUILD BIG?
           </h2>
-          <p className="font-sans text-base md:text-lg text-on-tertiary opacity-90 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Let&apos;s architect a solution that scales. Stop dealing with bugs and start shipping features that your users will love.
+          <p className="font-sans text-base md:text-lg text-on-tertiary opacity-90 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Let&apos;s architect a solution that scales. Stop dealing with technical debt and start shipping production features your users love.
           </p>
-          <a
-            href={`mailto:${personalData.contact.email}`}
-            className="inline-flex items-center gap-4 bg-surface text-on-surface px-10 py-5 brutalist-border brutalist-shadow font-display font-black text-xl uppercase hover:translate-x-2 hover:translate-y-2 hover:shadow-none transition-all"
-          >
-            <span>HIRE ME</span>
-            <ArrowUpRight className="h-7 w-7 stroke-[3]" />
-          </a>
-        </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <a
+              href={`mailto:${personalData.contact.email}`}
+              aria-label={`Send email to ${personalData.contact.email}`}
+              className="inline-flex items-center gap-3 bg-surface text-on-surface px-8 py-4 brutalist-border brutalist-shadow font-display font-black text-lg uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
+            >
+              <span>HIRE ME NOW</span>
+              <ArrowUpRight className="h-6 w-6 stroke-[3]" />
+            </a>
+
+            <a
+              href={personalData.contact.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View Resume PDF"
+              className="inline-flex items-center gap-2 bg-primary-container text-on-primary-container px-6 py-4 brutalist-border brutalist-shadow font-display font-bold text-sm uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
+            >
+              <FileText className="h-5 w-5 stroke-[2.5]" />
+              <span>VIEW RESUME</span>
+            </a>
+
+            <button
+              onClick={handleCopyEmail}
+              aria-label="Copy email address to clipboard"
+              className="inline-flex items-center gap-2 bg-secondary-container text-on-surface px-6 py-4 brutalist-border brutalist-shadow font-display font-bold text-sm uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
+            >
+              {copied ? (
+                <>
+                  <Check className="h-5 w-5 text-secondary stroke-[3]" />
+                  <span>COPIED!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="h-5 w-5 stroke-[2.5]" />
+                  <span>COPY EMAIL</span>
+                </>
+              )}
+            </button>
+          </div>
+        </RevealOnScroll>
       </section>
 
       {/* Direct Contact Form Section */}
-      <section className="py-20 px-5 md:px-20 max-w-[1280px] mx-auto">
-        <div className="max-w-2xl mx-auto bg-surface p-8 md:p-12 brutalist-border brutalist-shadow">
-          <h3 className="font-display font-black text-3xl uppercase text-on-surface mb-2">
+      <section className="py-16 md:py-24 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 w-full max-w-[1440px] mx-auto">
+        <RevealOnScroll direction="up" className="max-w-2xl mx-auto bg-surface p-6 md:p-12 brutalist-border brutalist-shadow">
+          <h3 className="font-display font-black text-2xl md:text-3xl uppercase text-on-surface mb-2">
             SEND A DIRECT MESSAGE
           </h3>
           <p className="font-sans text-sm text-on-surface/80 mb-8">
             Have a project in mind or an open role? Fill out the form below or email me directly at{" "}
-            <a href={`mailto:${personalData.contact.email}`} className="font-bold underline text-primary">
+            <a
+              href={`mailto:${personalData.contact.email}`}
+              className="font-bold underline text-primary focus-visible:outline-none"
+            >
               {personalData.contact.email}
             </a>
           </p>
 
+          {/* Form Error Banner */}
+          {errorMsg && (
+            <div className="bg-tertiary-container/30 border-2 border-tertiary p-4 mb-6 flex items-center gap-3 text-tertiary font-sans font-bold text-xs uppercase">
+              <AlertCircle className="h-5 w-5 shrink-0" />
+              <span>{errorMsg}</span>
+            </div>
+          )}
+
+          {/* Success State */}
           {submitted ? (
-            <div className="bg-secondary-container p-6 brutalist-border text-center flex flex-col items-center gap-3">
-              <CheckCircle2 className="h-10 w-10 text-secondary stroke-[2.5]" />
-              <h4 className="font-display font-black text-xl text-on-surface uppercase">
+            <div className="bg-secondary-container p-8 brutalist-border text-center flex flex-col items-center gap-4">
+              <CheckCircle2 className="h-12 w-12 text-secondary stroke-[2.5]" />
+              <h4 className="font-display font-black text-2xl text-on-surface uppercase">
                 MESSAGE SENT SUCCESSFULLY!
               </h4>
-              <p className="font-sans text-sm text-on-surface">
-                Thank you for reaching out. I will get back to you within 24 hours.
+              <p className="font-sans text-sm text-on-surface max-w-md">
+                Thank you for reaching out, Satyapradip will review your message and respond within 24 hours.
               </p>
+              <button
+                onClick={() => setSubmitted(false)}
+                className="mt-2 font-display font-bold text-xs uppercase bg-surface text-on-surface px-6 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover cursor-pointer"
+              >
+                SEND ANOTHER MESSAGE
+              </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div>
-                <label className="block font-sans font-bold text-xs uppercase mb-2 text-on-surface">
-                  YOUR NAME
+                <label htmlFor="contact-name" className="block font-sans font-bold text-xs uppercase mb-2 text-on-surface">
+                  YOUR NAME <span className="text-tertiary">*</span>
                 </label>
                 <input
+                  id="contact-name"
                   type="text"
                   required
+                  aria-required="true"
                   placeholder="Satyapradip Das"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full p-4 bg-surface-container-low brutalist-border font-sans text-sm focus:outline-none focus:bg-primary-container/20"
+                  className="w-full p-4 bg-surface-container-low brutalist-border font-sans text-sm focus:outline-none focus:bg-primary-container/20 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block font-sans font-bold text-xs uppercase mb-2 text-on-surface">
-                  YOUR EMAIL
+                <label htmlFor="contact-email" className="block font-sans font-bold text-xs uppercase mb-2 text-on-surface">
+                  YOUR EMAIL <span className="text-tertiary">*</span>
                 </label>
                 <input
+                  id="contact-email"
                   type="email"
                   required
+                  aria-required="true"
                   placeholder="your.email@example.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full p-4 bg-surface-container-low brutalist-border font-sans text-sm focus:outline-none focus:bg-primary-container/20"
+                  className="w-full p-4 bg-surface-container-low brutalist-border font-sans text-sm focus:outline-none focus:bg-primary-container/20 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block font-sans font-bold text-xs uppercase mb-2 text-on-surface">
-                  PROJECT DETAILS / MESSAGE
+                <label htmlFor="contact-message" className="block font-sans font-bold text-xs uppercase mb-2 text-on-surface">
+                  PROJECT DETAILS / MESSAGE <span className="text-tertiary">*</span>
                 </label>
                 <textarea
+                  id="contact-message"
                   required
+                  aria-required="true"
                   rows={4}
                   placeholder="Tell me about your project, timeline, or open role..."
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full p-4 bg-surface-container-low brutalist-border font-sans text-sm focus:outline-none focus:bg-primary-container/20 resize-none"
+                  className="w-full p-4 bg-surface-container-low brutalist-border font-sans text-sm focus:outline-none focus:bg-primary-container/20 resize-none transition-colors"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-primary-container text-on-primary-container font-sans font-bold text-sm uppercase py-4 brutalist-border brutalist-shadow brutalist-shadow-hover flex items-center justify-center gap-2"
+                disabled={loading}
+                aria-label="Send Message"
+                className="w-full bg-primary-container text-on-primary-container font-sans font-bold text-sm uppercase py-4 brutalist-border brutalist-shadow brutalist-shadow-hover flex items-center justify-center gap-2 disabled:opacity-75 disabled:cursor-not-allowed cursor-pointer"
               >
-                <span>SEND MESSAGE</span>
-                <Send className="h-4 w-4 stroke-[2.5]" />
+                {loading ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>SENDING...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>SEND MESSAGE</span>
+                    <Send className="h-4 w-4 stroke-[2.5]" />
+                  </>
+                )}
               </button>
             </form>
           )}
-        </div>
+        </RevealOnScroll>
       </section>
     </div>
   );

@@ -107,3 +107,28 @@ body {
 .animate-spin-slow {
   animation: spin-slow 12s linear infinite;
 }
+
+/* Accessibility Focus Outline */
+:focus-visible {
+  outline: 3px solid #f5a623 !important;
+  outline-offset: 3px !important;
+}
+
+/* Subtle Card Glow Effect */
+.card-glow-hover {
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.card-glow-hover:hover {
+  box-shadow: 8px 8px 0px #151b29, 0 0 20px rgba(245, 166, 35, 0.25);
+}
+
+/* Force Cursor Pointer on Interactive Elements */
+button,
+a,
+input[type="submit"],
+input[type="button"],
+[role="button"],
+.cursor-pointer {
+  cursor: pointer !important;
+}

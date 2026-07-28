@@ -7,8 +7,8 @@ import { personalData } from "@/constants/personal";
 
 export function Footer() {
   return (
-    <footer className="bg-on-surface text-surface py-20 px-5 md:px-20 border-t-3 border-surface-variant">
-      <div className="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-16">
+    <footer className="bg-on-surface text-surface py-20 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 border-t-3 border-surface-variant">
+      <div className="w-full max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-16">
         
         {/* Column 1: Brand & Status */}
         <div className="md:col-span-1">
@@ -106,14 +106,22 @@ export function Footer() {
       </div>
 
       {/* Footer Bottom Row */}
-      <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center border-t border-surface-variant/40 pt-8">
+      <div className="w-full max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-center border-t border-surface-variant/40 pt-8 gap-4">
         <p className="font-sans font-bold text-xs uppercase opacity-70">
           © {new Date().getFullYear()} SATYAPRADIP DAS. ALL RIGHTS RESERVED.
         </p>
-        <div className="flex items-center gap-3 mt-4 md:mt-0">
-          <span className="font-sans font-bold text-xs uppercase tracking-widest">BUILD SOLID</span>
-          <div className="w-9 h-9 bg-secondary-container brutalist-border border-surface rounded-full flex items-center justify-center">
-            <CheckCircle2 className="h-5 w-5 text-on-surface stroke-[2.5]" />
+        <div className="flex items-center gap-6">
+          <Link
+            href="/admin/login"
+            className="font-sans font-bold text-xs uppercase text-surface/70 hover:text-primary-container transition-colors cursor-pointer border-b border-dashed border-surface/40 hover:border-primary-container"
+          >
+            ADMIN PORTAL 🔒
+          </Link>
+          <div className="flex items-center gap-2">
+            <span className="font-sans font-bold text-xs uppercase tracking-widest">BUILD SOLID</span>
+            <div className="w-8 h-8 bg-secondary-container brutalist-border border-surface rounded-full flex items-center justify-center">
+              <CheckCircle2 className="h-4 w-4 text-on-surface stroke-[2.5]" />
+            </div>
           </div>
         </div>
       </div>

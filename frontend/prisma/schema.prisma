@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String   // Hashed password
+  name      String?
+  image     String?
+  createdAt DateTime @default(now())
+}
+
+model Profile {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  role      String
+  tagline   String
+  bio       String
+  photoUrl  String
+  resumeUrl String
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  subtitle    String
+  description String
+  badge       String?
+  techStack   String[]
+  features    String[]
+  liveUrl     String?
+  githubUrl   String?
+  imageUrl    String?
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model SkillCategory {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  iconName String
+  skills   String[]
+}
+
+model Experience {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  year         String
+  company      String
+  role         String
+  location     String
+  highlights   String[]
+  techStack    String[]
+  caseStudyUrl String?
+}
+
+model Education {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  institution String
+  degree      String
+  cgpa        String
+  period      String
+  highlights  String[]
+}
+
+model Certification {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  issuer        String
+  credentialUrl String?
+}

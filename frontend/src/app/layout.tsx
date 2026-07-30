@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { montserrat, workSans } from "@/lib/fonts";
+import Providers from "@/components/providers/Providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -30,7 +31,7 @@ export default function RootLayout({
       className={`${montserrat.variable} ${workSans.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col font-sans text-on-surface selection:bg-primary-container selection:text-on-primary-container">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

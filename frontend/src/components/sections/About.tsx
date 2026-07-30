@@ -1,19 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CheckCircle2, User, Award, Code2, GraduationCap, Briefcase } from "lucide-react";
 import { personalData } from "@/constants/personal";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { RevealOnScroll } from "@/components/shared/RevealOnScroll";
 import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 
-/**
- * About Component
- * 
- * Displays the "WHO I AM" section presenting Satyapradip's background,
- * key focus areas, current pursuits, and high-level stats in a Neo-Brutalist aesthetic.
- */
 export function About() {
+  const [bio, setBio] = useState<string>(personalData.bio);
+
+  useEffect(() => {
+    fetch("/api/profile")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.profile?.bio) {
+          setBio(data.profile.bio);
+        }
+      })
+      .catch((err) => console.error("Failed to load profile in About component", err));
+  }, []);
+
   return (
     <section id="about" className="py-16 md:py-24 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 w-full max-w-[1440px] mx-auto">
       {/* Section Header */}
@@ -38,7 +45,7 @@ export function About() {
 
             {/* Paragraph Bio */}
             <p className="font-sans text-base leading-relaxed text-on-surface mb-6">
-              {personalData.bio}
+              {bio}
             </p>
 
             {/* Current Pursuits List */}
@@ -70,7 +77,7 @@ export function About() {
               <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
                 <AnimatedCounter value={personalData.stats.experienceYears} />
               </div>
-              <p className="font-sans font-bold text-xs uppercase tracking-wider text-on-surface mt-1">
+              <p className="font-sans font-bold text-[#18181B] text-xs uppercase tracking-wider mt-1">
                 YEARS EXPERIENCE
               </p>
             </div>
@@ -81,7 +88,7 @@ export function About() {
               <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
                 <AnimatedCounter value={personalData.stats.projectsCompleted} />
               </div>
-              <p className="font-sans font-bold text-xs uppercase tracking-wider text-on-surface mt-1">
+              <p className="font-sans font-bold text-[#18181B] text-xs uppercase tracking-wider mt-1">
                 PROJECTS BUILT
               </p>
             </div>
@@ -92,7 +99,7 @@ export function About() {
               <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
                 <AnimatedCounter value={personalData.stats.technologiesCount} />
               </div>
-              <p className="font-sans font-bold text-xs uppercase tracking-wider text-on-surface mt-1">
+              <p className="font-sans font-bold text-[#18181B] text-xs uppercase tracking-wider mt-1">
                 TECH STACK TOOLS
               </p>
             </div>
@@ -103,7 +110,7 @@ export function About() {
               <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
                 <AnimatedCounter value={personalData.stats.cgpa} />
               </div>
-              <p className="font-sans font-bold text-xs uppercase tracking-wider text-on-surface mt-1">
+              <p className="font-sans font-bold text-[#18181B] text-xs uppercase tracking-wider mt-1">
                 OVERALL CGPA
               </p>
             </div>

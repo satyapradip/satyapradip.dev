@@ -29,9 +29,9 @@ export function Contact() {
   };
 
   /**
-   * Form submit handler with simulated async dispatch & validation
+   * Form submit handler with real API submission to /api/contact
    */
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
 
@@ -47,12 +47,26 @@ export function Contact() {
 
     setLoading(true);
 
-    // Simulate async network request
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setSubmitted(true);
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        setErrorMsg(data.error || "Failed to send message.");
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || "An unexpected network error occurred.");
+    } finally {
       setLoading(false);
-      setSubmitted(true);
-      setFormData({ name: "", email: "", message: "" });
-    }, 1200);
+    }
   };
 
   return (
@@ -75,6 +89,14 @@ export function Contact() {
             >
               <span>HIRE ME NOW</span>
               <ArrowUpRight className="h-6 w-6 stroke-[3]" />
+            </a>
+
+            <a
+              href={`tel:${personalData.contact.phone}`}
+              aria-label={`Call ${personalData.contact.phone}`}
+              className="inline-flex items-center gap-2 bg-emerald-400 text-[#18181B] px-6 py-4 brutalist-border brutalist-shadow font-display font-bold text-sm uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
+            >
+              <span>CALL: {personalData.contact.phone}</span>
             </a>
 
             <a
@@ -116,7 +138,11 @@ export function Contact() {
             SEND A DIRECT MESSAGE
           </h3>
           <p className="font-sans text-sm text-on-surface/80 mb-8">
-            Have a project in mind or an open role? Fill out the form below or email me directly at{" "}
+            Have a project in mind or an open role? Call me at{" "}
+            <a href={`tel:${personalData.contact.phone}`} className="font-bold underline text-primary">
+              {personalData.contact.phone}
+            </a>{" "}
+            or email directly at{" "}
             <a
               href={`mailto:${personalData.contact.email}`}
               className="font-bold underline text-primary focus-visible:outline-none"

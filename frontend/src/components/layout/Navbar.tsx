@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, FileText, Mail } from "lucide-react";
+import { Menu, FileText } from "lucide-react";
 import { personalData } from "@/constants/personal";
 import {
   Sheet,
@@ -12,14 +12,20 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-/**
- * Navbar Component
- * 
- * Provides a sticky top navigation bar with brand logo, smooth-scroll anchor links,
- * action CTA buttons (Resume + Hire Me), and responsive mobile drawer menu using shadcn Sheet.
- */
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [resumeUrl, setResumeUrl] = useState<string>(personalData.contact.resumeUrl);
+
+  useEffect(() => {
+    fetch("/api/profile")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.profile?.resumeUrl) {
+          setResumeUrl(data.profile.resumeUrl);
+        }
+      })
+      .catch((err) => console.error("Failed to load profile in Navbar", err));
+  }, []);
 
   return (
     <nav className="sticky top-0 w-full z-50 bg-surface border-b-3 border-on-surface">
@@ -76,7 +82,7 @@ export function Navbar() {
         {/* Desktop Action Buttons: Resume + Hire Me */}
         <div className="hidden md:flex items-center gap-3">
           <a
-            href={personalData.contact.resumeUrl}
+            href={resumeUrl}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Download Resume"
@@ -95,7 +101,7 @@ export function Navbar() {
         {/* Mobile Hamburger Drawer */}
         <div className="md:hidden flex items-center gap-2">
           <a
-            href={personalData.contact.resumeUrl}
+            href={resumeUrl}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -165,7 +171,7 @@ export function Navbar() {
 
               <div className="pt-4 border-t-3 border-on-surface space-y-3">
                 <a
-                  href={personalData.contact.resumeUrl}
+                  href={resumeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}

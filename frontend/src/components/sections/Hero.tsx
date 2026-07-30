@@ -1,17 +1,34 @@
 "use client";
 
-import React from "react";
-import Image from "next/image";
-import { ArrowRight, Code2, FileText, Terminal, Mail, Sparkles } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { ArrowRight, FileText, Mail } from "lucide-react";
 import { personalData } from "@/constants/personal";
 
-/**
- * Hero Component
- * 
- * Displays the primary landing header: name, availability pill, title badge, tagline,
- * profile avatar, commit count badge, and prominent CTA buttons including Resume download.
- */
+interface ProfileData {
+  name: string;
+  role: string;
+  tagline: string;
+  bio: string;
+  photoUrl: string;
+  resumeUrl: string;
+}
+
 export function Hero() {
+  const [profile, setProfile] = useState<ProfileData | null>(null);
+
+  useEffect(() => {
+    fetch("/api/profile")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.profile) {
+          setProfile(data.profile);
+        }
+      })
+      .catch((err) => console.error("Failed to load hero profile", err));
+  }, []);
+
+  const resumeLink = profile?.resumeUrl || personalData.contact.resumeUrl;
+
   return (
     <header className="relative overflow-hidden py-12 md:py-24 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 w-full max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 items-center gap-10 lg:gap-12">
       
@@ -27,19 +44,25 @@ export function Hero() {
           </span>
         </div>
 
-        <h1 className="font-display font-black text-5xl sm:text-6xl md:text-7xl lg:text-[84px] leading-[0.95] tracking-tight mb-6 text-on-surface">
-          SATYAPRADIP<br />
-          <span className="text-outline-variant italic stroke-on-surface">DAS</span>
+        <h1 className="font-display font-black text-5xl sm:text-6xl md:text-7xl lg:text-[84px] leading-[0.95] tracking-tight mb-6 text-on-surface uppercase">
+          {profile?.name ? (
+            profile.name
+          ) : (
+            <>
+              SATYAPRADIP<br />
+              <span className="text-outline-variant italic stroke-on-surface">DAS</span>
+            </>
+          )}
         </h1>
 
         <div className="mb-6 inline-block">
-          <h2 className="font-display font-bold text-base sm:text-lg md:text-xl text-on-surface bg-primary-container px-4 py-2 brutalist-border shadow-xs">
-            FULL-STACK DEVELOPER / AI-ML ENGINEER
+          <h2 className="font-display font-bold text-base sm:text-lg md:text-xl text-on-surface bg-primary-container px-4 py-2 brutalist-border shadow-xs uppercase">
+            {profile?.role || "FULL-STACK DEVELOPER / AI-ML ENGINEER"}
           </h2>
         </div>
 
         <p className="font-sans text-base sm:text-lg text-on-surface max-w-2xl mb-8 border-l-4 border-on-surface pl-6 py-2 leading-relaxed">
-          I have hands-on experience in MERN stack, AWS, and CI/CD, focused on building scalable web and mobile applications with a deep passion for Machine Learning integrations.
+          {profile?.tagline || profile?.bio || "I have hands-on experience in MERN stack, AWS, and CI/CD, focused on building scalable web and mobile applications with a deep passion for Machine Learning integrations."}
         </p>
 
         {/* Action CTAs: View Code, Resume, Hire Me */}
@@ -54,7 +77,7 @@ export function Hero() {
 
           <a
             className="bg-primary-container text-on-primary-container font-sans font-bold text-sm uppercase px-6 py-3.5 brutalist-border brutalist-shadow brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
-            href={personalData.contact.resumeUrl}
+            href={resumeLink}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="View Resume PDF"
@@ -78,17 +101,25 @@ export function Hero() {
         <div className="relative">
           {/* Main Avatar Container */}
           <div className="w-64 h-64 md:w-88 md:h-88 lg:w-96 lg:h-96 rounded-full brutalist-border overflow-hidden bg-surface-container-high relative z-10 p-2 bg-surface shadow-md">
-            <div className="w-full h-full rounded-full overflow-hidden bg-primary-container/20 flex flex-col items-center justify-center text-center p-6 border-2 border-on-surface">
-              <div className="h-28 w-28 md:h-32 md:w-32 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-display font-black text-3xl md:text-4xl border-3 border-on-surface brutalist-shadow mb-2">
-                SD
+            {profile?.photoUrl ? (
+              <img
+                src={profile.photoUrl}
+                alt={profile.name || "Satyapradip Das"}
+                className="w-full h-full rounded-full object-cover border-2 border-on-surface"
+              />
+            ) : (
+              <div className="w-full h-full rounded-full overflow-hidden bg-primary-container/20 flex flex-col items-center justify-center text-center p-6 border-2 border-on-surface">
+                <div className="h-28 w-28 md:h-32 md:w-32 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-display font-black text-3xl md:text-4xl border-3 border-on-surface brutalist-shadow mb-2">
+                  SD
+                </div>
+                <h3 className="font-display font-black text-xl text-on-surface uppercase">
+                  {profile?.name || "Satyapradip Das"}
+                </h3>
+                <p className="font-sans text-xs font-bold text-secondary uppercase mt-1">
+                  Kolkata, India
+                </p>
               </div>
-              <h3 className="font-display font-black text-xl text-on-surface uppercase">
-                Satyapradip Das
-              </h3>
-              <p className="font-sans text-xs font-bold text-secondary uppercase mt-1">
-                Kolkata, India
-              </p>
-            </div>
+            )}
           </div>
 
           {/* 10K+ Commits Rotated Badge */}

@@ -84,7 +84,7 @@ export function Projects() {
 
               {/* Tech Stack Pills */}
               <div className="flex flex-wrap gap-2 mb-6">
-                {project1.techStack.map((tech) => (
+                {project1.techStack?.map((tech) => (
                   <span
                     key={tech}
                     className="font-sans text-xs font-bold bg-surface text-on-surface px-3 py-1 brutalist-border"
@@ -100,7 +100,7 @@ export function Projects() {
                   KEY HIGHLIGHTS:
                 </h4>
                 <ul className="space-y-1">
-                  {project1.features.slice(0, 3).map((f, i) => (
+                  {project1.features?.slice(0, 3).map((f, i) => (
                     <li key={i} className="flex items-center gap-2 text-xs font-semibold text-on-surface">
                       <CheckCircle2 className="h-3.5 w-3.5 text-on-surface shrink-0" />
                       <span>{f}</span>
@@ -159,7 +159,7 @@ export function Projects() {
 
               {/* Tech Stack Pills */}
               <div className="flex flex-wrap gap-2 mb-6">
-                {project2.techStack.map((tech) => (
+                {project2.techStack?.map((tech) => (
                   <span
                     key={tech}
                     className="font-sans text-xs font-bold bg-surface text-on-surface px-3 py-1 brutalist-border"
@@ -175,7 +175,7 @@ export function Projects() {
                   KEY HIGHLIGHTS:
                 </h4>
                 <ul className="space-y-1">
-                  {project2.features.slice(0, 3).map((f, i) => (
+                  {project2.features?.slice(0, 3).map((f, i) => (
                     <li key={i} className="flex items-center gap-2 text-xs font-semibold text-on-surface">
                       <CheckCircle2 className="h-3.5 w-3.5 text-on-surface shrink-0" />
                       <span>{f}</span>

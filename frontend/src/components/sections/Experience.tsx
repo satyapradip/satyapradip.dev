@@ -57,37 +57,21 @@ export function Experience() {
                   <TrendingUp className="h-4 w-4 text-tertiary" /> KEY CONTRIBUTIONS & QUANTIFIED IMPACT:
                 </h5>
                 <ul className="space-y-2.5">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-4 w-4 text-tertiary shrink-0 mt-1" />
-                    <span className="font-sans text-sm text-on-surface leading-relaxed">
-                      Engineered production MERN stack web applications with secure JWT authentication and state management.
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-4 w-4 text-tertiary shrink-0 mt-1" />
-                    <span className="font-sans text-sm text-on-surface leading-relaxed">
-                      Architected 10+ RESTful APIs following strict MVC design patterns, reducing average backend latency by <strong>35%</strong>.
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-4 w-4 text-tertiary shrink-0 mt-1" />
-                    <span className="font-sans text-sm text-on-surface leading-relaxed">
-                      Optimized MongoDB index structures and query performance, managing <strong>5,000+</strong> active user records seamlessly.
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-4 w-4 text-tertiary shrink-0 mt-1" />
-                    <span className="font-sans text-sm text-on-surface leading-relaxed">
-                      Collaborated via Git version control, active peer code reviews, and Agile sprint workflows.
-                    </span>
-                  </li>
+                  {item.highlights?.map((highlight, hIndex) => (
+                    <li key={hIndex} className="flex items-start gap-3">
+                      <CheckCircle2 className="h-4 w-4 text-tertiary shrink-0 mt-1" />
+                      <span className="font-sans text-sm text-on-surface leading-relaxed">
+                        {highlight}
+                      </span>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
               {/* Tech Stack Badges & Action Button */}
               <div className="flex flex-wrap items-center justify-between gap-4 border-t-3 border-on-surface pt-4">
                 <div className="flex flex-wrap gap-2">
-                  {item.techStack.map((tech) => (
+                  {item.techStack?.map((tech) => (
                     <span
                       key={tech}
                       className="font-sans text-xs font-bold bg-surface-container-low text-on-surface px-2.5 py-1 brutalist-border"

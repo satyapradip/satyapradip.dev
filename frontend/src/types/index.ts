@@ -12,6 +12,7 @@ export interface PersonalDetails {
   };
   contact: {
     email: string;
+    phone?: string;
     github: string;
     linkedin: string;
     location: string;

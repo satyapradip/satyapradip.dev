@@ -16,13 +16,16 @@ export const personalData: PersonalDetails = {
     experienceYears: "1+",
     projectsCompleted: "15+",
     technologiesCount: "30+",
-    cgpa: "9.29",
+    cgpa: "9.59",
   },
   contact: {
-    email: "satyapradip.das@example.com",
+    email: "satyapradip7602@gmail.com",
+    phone: "+91 7602629919",
     github: "https://github.com/satyapradip",
     linkedin: "https://linkedin.com/in/satyapradip",
     location: "Kolkata, India",
     resumeUrl: "/resume.pdf",
   },
 };
+
+export const personalInfo = personalData;

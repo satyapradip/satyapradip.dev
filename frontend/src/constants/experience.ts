@@ -13,7 +13,8 @@ export const experienceData: ExperienceItem[] = [
       "Optimized query performance and reduced database response times for core data pipelines.",
       "Collaborated via Git, active code reviews, and Agile sprint workflows.",
     ],
-    techStack: ["MERN", "Authentication", "REST APIs", "MVC", "Git", "Agile", "Performance Optimization"],
-    caseStudyUrl: "#corporate-pot-case-study",
+    techStack: ["React", "Node.js", "Express", "MongoDB", "Redux", "JWT", "Git"],
   },
 ];
+
+export const experiences = experienceData;

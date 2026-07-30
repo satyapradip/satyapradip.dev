@@ -127,5 +127,8 @@ export const projectsData: Project[] = [
     liveUrl: "https://taskmatrix.vercel.app",
     githubUrl: "https://github.com/satyapradip/task-matrix-flow",
     variant: "default",
+    order: 15,
   },
 ];
+
+export const projects = projectsData;

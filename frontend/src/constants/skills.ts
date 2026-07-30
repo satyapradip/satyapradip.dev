@@ -27,3 +27,5 @@ export const skillsData: SkillCategory[] = [
     skills: ["Git & GitHub", "Docker", "Postman", "VS Code", "npm / npx", "Vercel"],
   },
 ];
+
+export const skillCategories = skillsData;

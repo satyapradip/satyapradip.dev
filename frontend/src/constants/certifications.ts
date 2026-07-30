@@ -22,3 +22,5 @@ export const certificationsData: CertificationItem[] = [
     issuer: "Algorithmic Mastery",
   },
 ];
+
+export const certifications = certificationsData;

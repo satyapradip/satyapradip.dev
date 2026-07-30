@@ -11,3 +11,5 @@ export const educationData: EducationItem = {
     "Core coursework: Data Structures, Algorithms, DBMS, OS, Computer Networks, Neural Networks",
   ],
 };
+
+export const educationList = [educationData];

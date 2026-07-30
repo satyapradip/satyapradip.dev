@@ -76,3 +76,12 @@ model Certification {
   issuer        String
   credentialUrl String?
 }
+
+model Message {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

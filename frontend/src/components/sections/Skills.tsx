@@ -15,7 +15,7 @@ const iconMap = [
 
 export function Skills() {
   return (
-    <section className="py-20 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 w-full max-w-[1440px] mx-auto" id="skills">
+    <section className="py-20 w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12" id="skills">
       <h2 className="font-display font-black text-4xl sm:text-5xl md:text-6xl mb-16 uppercase tracking-tight text-on-surface">
         MY <span className="bg-primary-container px-3 py-1 brutalist-border text-on-primary-container">SKILLS</span>
       </h2>

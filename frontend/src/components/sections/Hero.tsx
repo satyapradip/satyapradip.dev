@@ -30,7 +30,7 @@ export function Hero() {
   const resumeLink = profile?.resumeUrl || personalData.contact.resumeUrl;
 
   return (
-    <header className="relative overflow-hidden py-12 md:py-24 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 w-full max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 items-center gap-10 lg:gap-12">
+    <header className="relative py-12 md:py-24 w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 items-center gap-10 lg:gap-12">
       
       {/* Left Column: Hero Text */}
       <div className="order-2 lg:order-1 lg:col-span-7">
@@ -100,7 +100,7 @@ export function Hero() {
       <div className="order-1 lg:order-2 lg:col-span-5 flex justify-center lg:justify-end relative">
         <div className="relative">
           {/* Main Avatar Container */}
-          <div className="w-64 h-64 md:w-88 md:h-88 lg:w-96 lg:h-96 rounded-full brutalist-border overflow-hidden bg-surface-container-high relative z-10 p-2 bg-surface shadow-md">
+          <div className="w-64 h-64 md:w-88 md:h-88 lg:w-96 lg:h-96 rounded-full brutalist-border overflow-hidden bg-surface relative z-10 p-2 shadow-md">
             {profile?.photoUrl ? (
               <img
                 src={profile.photoUrl}
@@ -125,7 +125,7 @@ export function Hero() {
           {/* 10K+ Commits Rotated Badge */}
           <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-primary-container p-4 md:p-5 brutalist-border brutalist-shadow -rotate-6 z-20">
             <p className="font-display font-black text-2xl md:text-3xl leading-tight text-on-surface">
-              10K+
+              650+
             </p>
             <p className="font-sans font-bold text-xs uppercase tracking-wider text-on-surface">
               COMMITS

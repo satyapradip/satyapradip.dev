@@ -72,8 +72,8 @@ export function Contact() {
   return (
     <div id="contact">
       {/* Crimson CTA Banner */}
-      <section className="bg-tertiary py-20 md:py-28 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 text-center text-on-tertiary">
-        <RevealOnScroll direction="up" className="w-full max-w-[1440px] mx-auto">
+      <section className="bg-tertiary py-20 md:py-28 text-center text-on-tertiary">
+        <RevealOnScroll direction="up" className="w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
           <h2 className="font-display font-black text-4xl sm:text-6xl md:text-[80px] text-on-tertiary leading-none mb-6 uppercase tracking-tighter">
             READY TO<br />BUILD BIG?
           </h2>
@@ -88,7 +88,7 @@ export function Contact() {
               className="inline-flex items-center gap-3 bg-surface text-on-surface px-8 py-4 brutalist-border brutalist-shadow font-display font-black text-lg uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
             >
               <span>HIRE ME NOW</span>
-              <ArrowUpRight className="h-6 w-6 stroke-[3]" />
+              <ArrowUpRight className="h-6 w-6 stroke-3" />
             </a>
 
             <a
@@ -117,7 +117,7 @@ export function Contact() {
             >
               {copied ? (
                 <>
-                  <Check className="h-5 w-5 text-secondary stroke-[3]" />
+                  <Check className="h-5 w-5 text-secondary stroke-3" />
                   <span>COPIED!</span>
                 </>
               ) : (
@@ -132,7 +132,7 @@ export function Contact() {
       </section>
 
       {/* Direct Contact Form Section */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 w-full max-w-[1440px] mx-auto">
+      <section className="py-16 md:py-24 w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         <RevealOnScroll direction="up" className="max-w-2xl mx-auto bg-surface p-6 md:p-12 brutalist-border brutalist-shadow">
           <h3 className="font-display font-black text-2xl md:text-3xl uppercase text-on-surface mb-2">
             SEND A DIRECT MESSAGE

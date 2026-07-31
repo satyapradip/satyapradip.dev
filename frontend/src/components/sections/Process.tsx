@@ -5,7 +5,7 @@ import { processStepsData } from "@/constants/process";
 
 export function Process() {
   return (
-    <section className="py-20 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 w-full max-w-[1440px] mx-auto" id="process">
+    <section className="py-20 w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12" id="process">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         
         {/* Left Column: Process Steps */}

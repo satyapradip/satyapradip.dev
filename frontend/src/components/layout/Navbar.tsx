@@ -29,7 +29,7 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 w-full z-50 bg-surface border-b-3 border-on-surface">
-      <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 py-4 max-w-[1440px] mx-auto">
+      <div className="flex justify-between items-center w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-4">
         
         {/* Brand Logo */}
         <Link

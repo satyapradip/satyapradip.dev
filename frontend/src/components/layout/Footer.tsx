@@ -7,8 +7,8 @@ import { personalData } from "@/constants/personal";
 
 export function Footer() {
   return (
-    <footer className="bg-on-surface text-surface py-20 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 border-t-3 border-surface-variant">
-      <div className="w-full max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-16">
+    <footer className="bg-on-surface text-surface py-20 border-t-3 border-surface-variant">
+      <div className="w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12 grid grid-cols-1 md:grid-cols-4 gap-10 mb-16">
         
         {/* Column 1: Brand & Status */}
         <div className="md:col-span-1">
@@ -106,7 +106,7 @@ export function Footer() {
       </div>
 
       {/* Footer Bottom Row */}
-      <div className="w-full max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-center border-t border-surface-variant/40 pt-8 gap-4">
+      <div className="w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12 flex flex-col md:flex-row justify-between items-center border-t border-surface-variant/40 pt-8 gap-4">
         <p className="font-sans font-bold text-xs uppercase opacity-70">
           © {new Date().getFullYear()} SATYAPRADIP DAS. ALL RIGHTS RESERVED.
         </p>

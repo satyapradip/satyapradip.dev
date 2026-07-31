@@ -15,7 +15,7 @@ import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
  */
 export function GitHubStats() {
   return (
-    <section id="github-stats" className="py-16 md:py-24 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 w-full max-w-[1440px] mx-auto">
+    <section id="github-stats" className="py-16 md:py-24 w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
       {/* Section Header */}
       <RevealOnScroll direction="up">
         <SectionHeading title="ACTIVITY & METRICS" subtitle="CODE HIGHLIGHTS" />
@@ -44,7 +44,7 @@ export function GitHubStats() {
             <div className="bg-surface-container-low p-6 brutalist-border text-center">
               <GitCommit className="h-7 w-7 text-tertiary mx-auto mb-2" />
               <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
-                <AnimatedCounter target={350} suffix="+" />
+                <AnimatedCounter target={650} suffix="+" />
               </div>
               <p className="font-sans font-bold text-xs uppercase tracking-wider text-on-surface mt-2">
                 GITHUB COMMITS

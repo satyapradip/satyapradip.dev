@@ -19,8 +19,8 @@ export function Projects() {
   const [project1, project2, project3] = featuredProjects;
 
   return (
-    <section className="bg-secondary py-20 md:py-28 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 border-y-3 border-on-surface my-12" id="projects">
-      <div className="w-full max-w-[1440px] mx-auto">
+    <section className="bg-secondary py-20 md:py-28 border-y-3 border-on-surface my-12" id="projects">
+      <div className="w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         
         {/* Header Row */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">

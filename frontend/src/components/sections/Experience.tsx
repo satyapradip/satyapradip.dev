@@ -14,7 +14,7 @@ import { RevealOnScroll } from "@/components/shared/RevealOnScroll";
  */
 export function Experience() {
   return (
-    <section id="experience" className="py-16 md:py-24 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 w-full max-w-[1440px] mx-auto">
+    <section id="experience" className="py-16 md:py-24 w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
       {/* Section Header */}
       <RevealOnScroll direction="up">
         <SectionHeading title="EXPERIENCE" subtitle="CAREER & QUANTIFIED IMPACT" />

@@ -6,8 +6,8 @@ import { certificationsData } from "@/constants/certifications";
 
 export function Education() {
   return (
-    <section className="bg-on-surface py-20 md:py-28 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 text-surface border-t-3 border-on-surface my-12" id="academic">
-      <div className="w-full max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+    <section className="bg-on-surface py-20 md:py-28 text-surface border-t-3 border-on-surface my-12" id="academic">
+      <div className="w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         
         {/* Left Column: Title & Rotated 9.29 SGPA Badge */}
         <div className="lg:col-span-4 flex flex-col justify-center">

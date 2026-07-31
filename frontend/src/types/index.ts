@@ -32,6 +32,9 @@ export interface Project {
   githubUrl?: string;
   caseStudyUrl?: string;
   image?: string;
+  imageUrl?: string;
+  featured?: boolean;
+  order?: number;
   variant?: "default" | "featured" | "dark";
 }
 

@@ -21,9 +21,9 @@ export async function GET() {
       features: p.features,
       liveUrl: p.liveUrl || null,
       githubUrl: p.githubUrl || null,
-      imageUrl: p.imageUrl || null,
-      featured: p.featured,
-      order: idx,
+      imageUrl: p.imageUrl || p.image || null,
+      featured: p.featured ?? (p.variant === "featured"),
+      order: p.order ?? idx,
     }));
     return NextResponse.json({ success: true, projects: formattedFallback });
   } catch (error) {
@@ -37,9 +37,9 @@ export async function GET() {
       features: p.features,
       liveUrl: p.liveUrl || null,
       githubUrl: p.githubUrl || null,
-      imageUrl: p.imageUrl || null,
-      featured: p.featured,
-      order: idx,
+      imageUrl: p.imageUrl || p.image || null,
+      featured: p.featured ?? (p.variant === "featured"),
+      order: p.order ?? idx,
     }));
     return NextResponse.json({ success: true, projects: formattedFallback });
   }

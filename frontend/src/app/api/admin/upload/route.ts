@@ -35,9 +35,9 @@ export async function POST(req: Request) {
         uploadFormData.append("signature", signature);
         uploadFormData.append("folder", "portfolio");
 
-        // Determine resource type: 'raw' for PDFs/Documents, 'auto' for Images
+        // Determine resource type: 'raw' for PDFs/Documents, 'image' for Images
         const isDocument = file.type.includes("pdf") || file.type.includes("doc") || file.name.endsWith(".pdf");
-        const resourceType = isDocument ? "raw" : "auto";
+        const resourceType = isDocument ? "raw" : "image";
 
         const cdnRes = await fetch(
           `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`,
@@ -53,14 +53,33 @@ export async function POST(req: Request) {
           console.log("✅ File uploaded to Cloudinary CDN:", cdnData.secure_url);
           return NextResponse.json({ success: true, url: cdnData.secure_url });
         } else {
-          console.warn("Cloudinary upload response warning, using local fallback:", cdnData);
+          const errMsg = cdnData.error?.message || JSON.stringify(cdnData);
+          console.error("Cloudinary error:", errMsg);
+          return NextResponse.json(
+            { success: false, error: `Cloudinary error: ${errMsg}` },
+            { status: 400 }
+          );
         }
-      } catch (cloudErr) {
-        console.warn("Cloudinary upload failed, falling back to local file storage:", cloudErr);
+      } catch (cloudErr: any) {
+        console.error("Cloudinary request failed:", cloudErr);
+        return NextResponse.json(
+          { success: false, error: `Cloudinary request failed: ${cloudErr.message}` },
+          { status: 500 }
+        );
       }
     }
 
-    // 2. Fallback: Local Disk Storage if Cloudinary is offline or credentials missing
+    // 2. Fallback for Local Development ONLY (Vercel filesystem is read-only)
+    if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Cloudinary credentials (CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET) missing in Vercel Environment Variables.",
+        },
+        { status: 400 }
+      );
+    }
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const cleanName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");

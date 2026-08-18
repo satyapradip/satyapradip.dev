@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ExternalLink, Terminal, Github, Layers, ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
+import { ExternalLink, Github, Layers, CheckCircle2 } from "lucide-react";
 import { projectsData } from "@/constants/projects";
 import { AllProjectsDrawer } from "@/components/sections/AllProjectsDrawer";
 import { Project } from "@/types";
@@ -158,7 +158,7 @@ export function Projects() {
                     className="bg-secondary-container text-on-surface font-sans font-bold text-xs uppercase px-5 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
                   >
                     <Github className="h-3.5 w-3.5" />
-                    <span>REPOSITORIES</span>
+                    <span>GITHUB</span>
                   </a>
                 )}
               </div>
@@ -241,7 +241,7 @@ export function Projects() {
                     className="bg-secondary-container text-on-surface font-sans font-bold text-xs uppercase px-5 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
                   >
                     <Github className="h-3.5 w-3.5" />
-                    <span>REPOSITORIES</span>
+                    <span>GITHUB</span>
                   </a>
                 )}
               </div>
@@ -290,21 +290,29 @@ export function Projects() {
               </div>
 
               <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-between gap-4 border-t-3 lg:border-t-0 lg:border-l-3 border-on-surface pt-6 lg:pt-0 lg:pl-8">
-                <button
-                  onClick={() => setDrawerOpen(true)}
-                  className="w-full bg-primary-container text-on-primary-container font-sans font-bold text-xs uppercase px-6 py-4 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center justify-center gap-2 cursor-pointer mb-2"
-                >
-                  <Layers className="h-4 w-4" />
-                  <span>EXPLORE ALL PROJECTS ({projects.length})</span>
-                </button>
+                {project3.features && project3.features.length > 0 && (
+                  <div className="w-full mb-2">
+                    <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-on-surface mb-2">
+                      CORE CAPABILITIES:
+                    </h4>
+                    <ul className="space-y-1">
+                      {project3.features.slice(0, 3).map((f, i) => (
+                        <li key={i} className="flex items-center gap-2 text-xs font-semibold text-on-surface">
+                          <CheckCircle2 className="h-3.5 w-3.5 text-on-surface shrink-0" />
+                          <span>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-                <div className="flex flex-wrap gap-2 w-full justify-end">
+                <div className="flex flex-wrap gap-3 w-full justify-start lg:justify-end">
                   {project3.liveUrl && (
                     <a
                       href={project3.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-surface text-on-surface font-sans font-bold text-xs uppercase px-4 py-2.5 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
+                      className="bg-surface text-on-surface font-sans font-bold text-xs uppercase px-5 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
                     >
                       <span>LIVE DEMO</span>
                       <ExternalLink className="h-3.5 w-3.5" />
@@ -315,7 +323,7 @@ export function Projects() {
                       href={project3.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-secondary-container text-on-surface font-sans font-bold text-xs uppercase px-4 py-2.5 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
+                      className="bg-secondary-container text-on-surface font-sans font-bold text-xs uppercase px-5 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
                     >
                       <Github className="h-3.5 w-3.5" />
                       <span>GITHUB</span>

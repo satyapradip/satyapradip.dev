@@ -89,17 +89,20 @@ export function Skills() {
           return (
             <div
               key={category.id || category.title || index}
-              className="bg-surface p-8 brutalist-border brutalist-shadow transition-all duration-200 hover:-translate-y-2 hover:shadow-[8px_8px_0px_#151b29]"
+              className="bg-surface p-8 brutalist-border brutalist-shadow transition-all duration-200 hover:-translate-y-2 hover:shadow-[8px_8px_0px_#151b29] flex flex-col justify-between h-full"
             >
-              <div
-                className={`w-16 h-16 ${bg} brutalist-border flex items-center justify-center mb-6 brutalist-shadow-sm`}
-              >
-                <Icon className="h-8 w-8 text-on-surface stroke-[2.5]" />
+              <div>
+                <div
+                  className={`w-16 h-16 ${bg} brutalist-border flex items-center justify-center mb-6 brutalist-shadow-sm`}
+                >
+                  <Icon className="h-8 w-8 text-on-surface stroke-[2.5]" />
+                </div>
+                <h3 className="font-display font-black text-2xl uppercase mb-4 text-on-surface">
+                  {category.title}
+                </h3>
               </div>
-              <h3 className="font-display font-black text-2xl uppercase mb-4 text-on-surface">
-                {category.title}
-              </h3>
-              <ul className="flex flex-wrap gap-2">
+
+              <ul className="flex flex-wrap gap-2 pt-2">
                 {category.skills?.map((skill, sIdx) => (
                   <li
                     key={`${skill}-${sIdx}`}

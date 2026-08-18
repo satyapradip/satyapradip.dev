@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ArrowRight, FileText, Mail } from "lucide-react";
+import { ArrowRight, FileText } from "lucide-react";
 import { personalData } from "@/constants/personal";
 
 interface ProfileData {
@@ -65,33 +65,25 @@ export function Hero() {
           {profile?.tagline || profile?.bio || "I have hands-on experience in MERN stack, AWS, and CI/CD, focused on building scalable web and mobile applications with a deep passion for Machine Learning integrations."}
         </p>
 
-        {/* Action CTAs: View Code, Resume, Hire Me */}
+        {/* Streamlined Action CTAs: View Featured Work + View Resume */}
         <div className="flex flex-wrap gap-4 items-center">
           <a
-            className="bg-tertiary text-on-tertiary font-sans font-bold text-sm uppercase px-6 py-3.5 brutalist-border brutalist-shadow brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
+            className="bg-tertiary text-on-tertiary font-sans font-bold text-sm uppercase px-7 py-4 brutalist-border brutalist-shadow brutalist-shadow-hover flex items-center gap-2.5 cursor-pointer"
             href="#projects"
           >
-            <span>VIEW MY CODE</span>
+            <span>VIEW FEATURED WORK</span>
             <ArrowRight className="h-4 w-4 stroke-[2.5]" />
           </a>
 
           <a
-            className="bg-primary-container text-on-primary-container font-sans font-bold text-sm uppercase px-6 py-3.5 brutalist-border brutalist-shadow brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
+            className="bg-primary-container text-on-primary-container font-sans font-bold text-sm uppercase px-7 py-4 brutalist-border brutalist-shadow brutalist-shadow-hover flex items-center gap-2.5 cursor-pointer"
             href={resumeLink}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="View Resume PDF"
           >
             <FileText className="h-4 w-4 stroke-[2.5]" />
-            <span>RESUME</span>
-          </a>
-
-          <a
-            className="bg-secondary-container text-on-surface font-sans font-bold text-sm uppercase px-6 py-3.5 brutalist-border brutalist-shadow brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
-            href="#contact"
-          >
-            <Mail className="h-4 w-4 stroke-[2.5]" />
-            <span>HIRE ME</span>
+            <span>VIEW RESUME</span>
           </a>
         </div>
       </div>
@@ -122,7 +114,7 @@ export function Hero() {
             )}
           </div>
 
-          {/* 10K+ Commits Rotated Badge */}
+          {/* 650+ Commits Rotated Badge */}
           <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-primary-container p-4 md:p-5 brutalist-border brutalist-shadow -rotate-6 z-20">
             <p className="font-display font-black text-2xl md:text-3xl leading-tight text-on-surface">
               650+

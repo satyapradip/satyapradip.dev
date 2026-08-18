@@ -90,46 +90,54 @@ export function About() {
           <div className="grid grid-cols-2 gap-4">
             
             {/* Stat Card 1: Experience */}
-            <div className="bg-secondary-container p-6 brutalist-border brutalist-shadow text-center">
-              <Briefcase className="h-8 w-8 text-on-surface mx-auto mb-2" />
-              <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
-                <AnimatedCounter value={stats.experienceYears} />
+            <div className="bg-secondary-container p-6 brutalist-border brutalist-shadow text-center flex flex-col justify-between">
+              <div>
+                <Briefcase className="h-7 w-7 text-on-surface mx-auto mb-2" />
+                <div className="font-display font-black text-3xl md:text-4xl text-[#18181B]">
+                  <AnimatedCounter value={stats.experienceYears} />
+                </div>
               </div>
-              <p className="font-sans font-bold text-[#18181B] text-xs uppercase tracking-wider mt-1">
+              <p className="font-sans font-black text-[#18181B] text-xs uppercase tracking-wider mt-2">
                 YEARS EXPERIENCE
               </p>
             </div>
 
             {/* Stat Card 2: Projects */}
-            <div className="bg-primary-container p-6 brutalist-border brutalist-shadow text-center">
-              <Code2 className="h-8 w-8 text-on-surface mx-auto mb-2" />
-              <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
-                <AnimatedCounter value={stats.projectsCompleted} />
+            <div className="bg-primary-container p-6 brutalist-border brutalist-shadow text-center flex flex-col justify-between">
+              <div>
+                <Code2 className="h-7 w-7 text-on-surface mx-auto mb-2" />
+                <div className="font-display font-black text-3xl md:text-4xl text-[#18181B]">
+                  <AnimatedCounter value={stats.projectsCompleted} />
+                </div>
               </div>
-              <p className="font-sans font-bold text-[#18181B] text-xs uppercase tracking-wider mt-1">
-                PROJECTS BUILT
+              <p className="font-sans font-black text-[#18181B] text-xs uppercase tracking-wider mt-2">
+                PROJECTS SHIPPED
               </p>
             </div>
 
             {/* Stat Card 3: Technologies */}
-            <div className="bg-tertiary-container p-6 brutalist-border brutalist-shadow text-center">
-              <Award className="h-8 w-8 text-on-surface mx-auto mb-2" />
-              <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
-                <AnimatedCounter value={stats.technologiesCount} />
+            <div className="bg-tertiary-container p-6 brutalist-border brutalist-shadow text-center flex flex-col justify-between">
+              <div>
+                <Award className="h-7 w-7 text-on-surface mx-auto mb-2" />
+                <div className="font-display font-black text-3xl md:text-4xl text-[#18181B]">
+                  <AnimatedCounter value={stats.technologiesCount} />
+                </div>
               </div>
-              <p className="font-sans font-bold text-[#18181B] text-xs uppercase tracking-wider mt-1">
-                TECH STACK TOOLS
+              <p className="font-sans font-black text-[#18181B] text-xs uppercase tracking-wider mt-2">
+                SKILLS & TOOLS
               </p>
             </div>
 
             {/* Stat Card 4: Academic Score */}
-            <div className="bg-surface-container-high p-6 brutalist-border brutalist-shadow text-center">
-              <GraduationCap className="h-8 w-8 text-on-surface mx-auto mb-2" />
-              <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
-                <AnimatedCounter value={stats.cgpa} />
+            <div className="bg-surface-container-high p-6 brutalist-border brutalist-shadow text-center flex flex-col justify-between">
+              <div>
+                <GraduationCap className="h-7 w-7 text-on-surface mx-auto mb-2" />
+                <div className="font-display font-black text-3xl md:text-4xl text-[#18181B]">
+                  <AnimatedCounter value={stats.cgpa} />
+                </div>
               </div>
-              <p className="font-sans font-bold text-[#18181B] text-xs uppercase tracking-wider mt-1">
-                OVERALL CGPA
+              <p className="font-sans font-black text-[#18181B] text-xs uppercase tracking-wider mt-2">
+                CURRENT CGPA
               </p>
             </div>
 

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { X, ExternalLink, Github, Layers, Sparkles, Filter } from "lucide-react";
 import { projectsData } from "@/constants/projects";
+import { Project } from "@/types";
 import {
   Sheet,
   SheetContent,
@@ -13,6 +14,7 @@ import {
 interface AllProjectsDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  projects?: Project[];
 }
 
 /**
@@ -21,22 +23,27 @@ interface AllProjectsDrawerProps {
  * Provides a side-scrolling drawer / interactive gallery displaying the entire portfolio
  * project archive, complete with category filter pills, tech stack tags, live links, and GitHub repos.
  */
-export function AllProjectsDrawer({ open, onOpenChange }: AllProjectsDrawerProps) {
+export function AllProjectsDrawer({ open, onOpenChange, projects }: AllProjectsDrawerProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
+
+  const activeProjects = projects && projects.length > 0 ? projects : projectsData;
 
   const categories = ["ALL", "FULL-STACK", "AI/ML", "DEVOPS", "PRODUCTIVITY"];
 
   // Filter projects based on selected category tag
-  const filteredProjects = projectsData.filter((project) => {
+  const filteredProjects = activeProjects.filter((project) => {
     if (selectedCategory === "ALL") return true;
+    const stack = project.techStack || [];
+    const badge = (project.badge || "").toUpperCase();
+    
     if (selectedCategory === "FULL-STACK")
-      return project.techStack.some((t) => ["React", "Node.js", "Express", "Next.js", "MongoDB", "Prisma"].includes(t));
+      return badge.includes("FULL") || stack.some((t) => ["React", "Node.js", "Express", "Next.js", "MongoDB", "Prisma", "TypeScript"].includes(t));
     if (selectedCategory === "AI/ML")
-      return project.techStack.some((t) => ["Gemini API", "OpenAI", "PyTorch", "NLP", "Python"].includes(t));
+      return badge.includes("AI") || badge.includes("ML") || stack.some((t) => ["Gemini API", "OpenAI", "PyTorch", "NLP", "Python", "Whisper"].includes(t));
     if (selectedCategory === "DEVOPS")
-      return project.techStack.some((t) => ["Docker", "WebSockets", "Redis", "AWS"].includes(t));
+      return badge.includes("DEVOPS") || badge.includes("CLOUD") || stack.some((t) => ["Docker", "WebSockets", "Redis", "AWS", "Kubernetes", "CI/CD"].includes(t));
     if (selectedCategory === "PRODUCTIVITY")
-      return project.techStack.some((t) => ["CLI", "Zustand", "Dnd-Kit", "Git Hooks"].includes(t));
+      return badge.includes("PRODUCTIVITY") || stack.some((t) => ["CLI", "Zustand", "Dnd-Kit", "Git Hooks", "Firebase"].includes(t));
     return true;
   });
 
@@ -79,7 +86,7 @@ export function AllProjectsDrawer({ open, onOpenChange }: AllProjectsDrawerProps
             ))}
           </div>
 
-          {/* Side-Scrolling / Vertical Grid Card Stream */}
+          {/* Vertical Grid Card Stream */}
           <div className="space-y-6">
             {filteredProjects.map((project) => (
               <div
@@ -97,9 +104,11 @@ export function AllProjectsDrawer({ open, onOpenChange }: AllProjectsDrawerProps
                     <h3 className="font-display font-black text-xl text-on-surface">
                       {project.title}
                     </h3>
-                    <p className="font-display font-bold text-xs text-secondary uppercase">
-                      {project.subtitle}
-                    </p>
+                    {project.subtitle && (
+                      <p className="font-display font-bold text-xs text-secondary uppercase">
+                        {project.subtitle}
+                      </p>
+                    )}
                   </div>
 
                   {/* Links */}
@@ -135,16 +144,18 @@ export function AllProjectsDrawer({ open, onOpenChange }: AllProjectsDrawerProps
                 </p>
 
                 {/* Tech Badges */}
-                <div className="flex flex-wrap gap-1.5 pt-3 border-t-2 border-dashed border-on-surface/30">
-                  {project.techStack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="font-sans text-[11px] font-bold bg-surface-container-low text-on-surface px-2 py-0.5 border border-on-surface"
-                    >
-                      #{tech}
-                    </span>
-                  ))}
-                </div>
+                {project.techStack && project.techStack.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t-2 border-dashed border-on-surface/30">
+                    {project.techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="font-sans text-[11px] font-bold bg-surface-container-low text-on-surface px-2 py-0.5 border border-on-surface"
+                      >
+                        #{tech}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -153,7 +164,7 @@ export function AllProjectsDrawer({ open, onOpenChange }: AllProjectsDrawerProps
         {/* Drawer Footer */}
         <div className="mt-8 pt-4 border-t-3 border-on-surface text-center">
           <p className="font-sans text-xs font-bold text-on-surface/70 uppercase">
-            Showing {filteredProjects.length} of {projectsData.length} projects
+            Showing {filteredProjects.length} of {activeProjects.length} projects
           </p>
         </div>
       </SheetContent>

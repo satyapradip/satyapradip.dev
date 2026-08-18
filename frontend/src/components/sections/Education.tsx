@@ -1,22 +1,59 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { educationData } from "@/constants/education";
 import { certificationsData } from "@/constants/certifications";
 
+interface EducationItem {
+  id?: string;
+  institution: string;
+  degree: string;
+  cgpa: string;
+  period: string;
+  highlights?: string[];
+}
+
+interface CertificationItem {
+  id?: string;
+  title: string;
+  issuer: string;
+  credentialUrl?: string | null;
+}
+
 export function Education() {
+  const [edu, setEdu] = useState<EducationItem>(educationData);
+  const [certs, setCerts] = useState<CertificationItem[]>(certificationsData);
+
+  useEffect(() => {
+    fetch("/api/academic")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          if (Array.isArray(data.education) && data.education.length > 0) {
+            setEdu(data.education[0]);
+          }
+          if (Array.isArray(data.certifications) && data.certifications.length > 0) {
+            setCerts(data.certifications);
+          }
+        }
+      })
+      .catch((err) => {
+        console.warn("Failed to fetch academic data from API, using fallback:", err);
+      });
+  }, []);
+
   return (
     <section className="bg-on-surface py-20 md:py-28 text-surface border-t-3 border-on-surface my-12" id="academic">
       <div className="w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         
-        {/* Left Column: Title & Rotated 9.29 SGPA Badge */}
+        {/* Left Column: Title & Rotated SGPA Badge */}
         <div className="lg:col-span-4 flex flex-col justify-center">
           <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl leading-none mb-8 text-surface tracking-tight">
             ACADEMIC<br />TRACK<br />RECORD
           </h2>
           <div className="bg-primary-container text-on-primary-container p-8 brutalist-border border-surface brutalist-shadow -rotate-3 inline-block self-start">
             <p className="font-display font-black text-5xl md:text-6xl mb-1">
-              {educationData.cgpa}
+              {edu.cgpa || educationData.cgpa}
             </p>
             <p className="font-sans font-bold text-xs md:text-sm uppercase tracking-wider">
               AVERAGE SGPA / CGPA
@@ -34,13 +71,13 @@ export function Education() {
             </div>
             <div>
               <h4 className="font-display font-black text-xl md:text-2xl uppercase mb-2 text-on-surface">
-                {educationData.institution}
+                {edu.institution || educationData.institution}
               </h4>
               <p className="font-sans font-bold text-base text-secondary mb-1">
-                {educationData.degree}
+                {edu.degree || educationData.degree}
               </p>
               <p className="font-sans text-sm text-on-surface/80 mb-4">
-                {educationData.period} | Current SGPA: {educationData.cgpa}/10
+                {edu.period || educationData.period} | Current SGPA: {edu.cgpa || educationData.cgpa}/10
               </p>
               <p className="font-sans text-sm text-on-surface/80 italic border-l-4 border-secondary-container pl-4 py-1">
                 Specialization in Artificial Intelligence and Machine Learning with consistent academic top rank.
@@ -58,8 +95,8 @@ export function Education() {
                 CERTIFICATIONS & TRAININGS
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {certificationsData.map((cert) => (
-                  <div key={cert.id} className="p-4 bg-surface-container-low brutalist-border">
+                {certs.map((cert, index) => (
+                  <div key={cert.id || index} className="p-4 bg-surface-container-low brutalist-border">
                     <p className="font-sans font-bold text-xs text-primary uppercase mb-1">
                       {cert.issuer}
                     </p>

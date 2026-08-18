@@ -1,22 +1,42 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ExternalLink, Terminal, Github, Layers, ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
 import { projectsData } from "@/constants/projects";
 import { AllProjectsDrawer } from "@/components/sections/AllProjectsDrawer";
+import { Project } from "@/types";
 
 /**
  * Projects Component
  * 
- * Showcases Satyapradip's top featured projects with deep-dive technical features,
+ * Showcases top featured projects with deep-dive technical features,
  * architecture highlights, live demos, GitHub repositories, and a prominent button
  * triggering the side-scrolling "View All Projects" gallery drawer.
  */
 export function Projects() {
+  const [projects, setProjects] = useState<Project[]>(projectsData);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const featuredProjects = projectsData.slice(0, 3);
 
-  const [project1, project2, project3] = featuredProjects;
+  useEffect(() => {
+    fetch("/api/projects")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.projects) && data.projects.length > 0) {
+          setProjects(data.projects);
+        }
+      })
+      .catch((err) => {
+        console.warn("Failed to fetch projects from API, retaining fallback:", err);
+      });
+  }, []);
+
+  // Filter projects marked as featured (or take top 3 as default)
+  const explicitFeatured = projects.filter((p) => p.featured || p.variant === "featured");
+  const featuredProjects = explicitFeatured.length > 0 ? explicitFeatured : projects.slice(0, 3);
+
+  const project1 = featuredProjects[0] || projects[0] || projectsData[0];
+  const project2 = featuredProjects[1] || projects[1];
+  const project3 = featuredProjects[2] || projects[2];
 
   return (
     <section className="bg-secondary py-20 md:py-28 border-y-3 border-on-surface my-12" id="projects">
@@ -44,7 +64,7 @@ export function Projects() {
               className="bg-primary-container text-on-primary-container font-sans font-bold text-xs uppercase px-6 py-4 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
             >
               <Layers className="h-4 w-4" />
-              <span>VIEW ALL PROJECTS ({projectsData.length})</span>
+              <span>VIEW ALL PROJECTS ({projects.length})</span>
             </button>
 
             <a
@@ -62,234 +82,256 @@ export function Projects() {
         {/* Top Grid: Project 1 & Project 2 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           
-          {/* Featured Project 1: Employee Management System */}
-          <div className="bg-primary-container p-6 md:p-8 brutalist-border brutalist-shadow flex flex-col justify-between">
-            <div>
-              <div className="flex justify-between items-start mb-6">
-                <span className="font-sans text-xs font-black uppercase tracking-wider bg-surface px-3 py-1 brutalist-border text-on-surface">
-                  {project1.badge || "ENTERPRISE"}
-                </span>
-                <span className="font-mono text-xs font-bold text-on-surface">01 // MULTI-TENANT</span>
-              </div>
-
-              <h3 className="font-display font-black text-3xl md:text-4xl text-on-surface mb-2">
-                {project1.title}
-              </h3>
-              <p className="font-display font-bold text-sm text-on-primary-container uppercase mb-4">
-                {project1.subtitle}
-              </p>
-              <p className="font-sans text-sm text-on-surface mb-6 leading-relaxed">
-                {project1.description}
-              </p>
-
-              {/* Tech Stack Pills */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {project1.techStack?.map((tech) => (
-                  <span
-                    key={tech}
-                    className="font-sans text-xs font-bold bg-surface text-on-surface px-3 py-1 brutalist-border"
-                  >
-                    #{tech}
+          {/* Featured Project 1 */}
+          {project1 && (
+            <div className="bg-primary-container p-6 md:p-8 brutalist-border brutalist-shadow flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between items-start mb-6">
+                  <span className="font-sans text-xs font-black uppercase tracking-wider bg-surface px-3 py-1 brutalist-border text-on-surface">
+                    {project1.badge || "ENTERPRISE"}
                   </span>
-                ))}
+                  <span className="font-mono text-xs font-bold text-on-surface">01 // FEATURED</span>
+                </div>
+
+                <h3 className="font-display font-black text-3xl md:text-4xl text-on-surface mb-2">
+                  {project1.title}
+                </h3>
+                {project1.subtitle && (
+                  <p className="font-display font-bold text-sm text-on-primary-container uppercase mb-4">
+                    {project1.subtitle}
+                  </p>
+                )}
+                <p className="font-sans text-sm text-on-surface mb-6 leading-relaxed">
+                  {project1.description}
+                </p>
+
+                {/* Tech Stack Pills */}
+                {project1.techStack && project1.techStack.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {project1.techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="font-sans text-xs font-bold bg-surface text-on-surface px-3 py-1 brutalist-border"
+                      >
+                        #{tech}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Feature Highlights */}
+                {project1.features && project1.features.length > 0 && (
+                  <div className="border-t-2 border-on-surface/40 pt-4 mb-6">
+                    <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-on-surface mb-2">
+                      KEY HIGHLIGHTS:
+                    </h4>
+                    <ul className="space-y-1">
+                      {project1.features.slice(0, 3).map((f, i) => (
+                        <li key={i} className="flex items-center gap-2 text-xs font-semibold text-on-surface">
+                          <CheckCircle2 className="h-3.5 w-3.5 text-on-surface shrink-0" />
+                          <span>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
 
-              {/* Feature Highlights */}
-              <div className="border-t-2 border-on-surface/40 pt-4 mb-6">
-                <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-on-surface mb-2">
-                  KEY HIGHLIGHTS:
-                </h4>
-                <ul className="space-y-1">
-                  {project1.features?.slice(0, 3).map((f, i) => (
-                    <li key={i} className="flex items-center gap-2 text-xs font-semibold text-on-surface">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-on-surface shrink-0" />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-3 border-t-3 border-on-surface pt-4">
-              {project1.liveUrl && (
-                <a
-                  href={project1.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-surface text-on-surface font-sans font-bold text-xs uppercase px-5 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
-                >
-                  <span>LIVE DEMO</span>
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </a>
-              )}
-              {project1.githubUrl && (
-                <a
-                  href={project1.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-secondary-container text-on-surface font-sans font-bold text-xs uppercase px-5 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
-                >
-                  <Github className="h-3.5 w-3.5" />
-                  <span>REPOSITORIES</span>
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* Featured Project 2: ApnaDoctor AI */}
-          <div className="bg-tertiary-container p-6 md:p-8 brutalist-border brutalist-shadow flex flex-col justify-between">
-            <div>
-              <div className="flex justify-between items-start mb-6">
-                <span className="font-sans text-xs font-black uppercase tracking-wider bg-surface px-3 py-1 brutalist-border text-on-surface">
-                  {project2.badge || "HEALTHCARE AI"}
-                </span>
-                <span className="font-mono text-xs font-bold text-on-surface">02 // GEMINI AI</span>
-              </div>
-
-              <h3 className="font-display font-black text-3xl md:text-4xl text-on-surface mb-2">
-                {project2.title}
-              </h3>
-              <p className="font-display font-bold text-sm text-secondary uppercase mb-4">
-                {project2.subtitle}
-              </p>
-              <p className="font-sans text-sm text-on-surface mb-6 leading-relaxed">
-                {project2.description}
-              </p>
-
-              {/* Tech Stack Pills */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {project2.techStack?.map((tech) => (
-                  <span
-                    key={tech}
-                    className="font-sans text-xs font-bold bg-surface text-on-surface px-3 py-1 brutalist-border"
-                  >
-                    #{tech}
-                  </span>
-                ))}
-              </div>
-
-              {/* Feature Highlights */}
-              <div className="border-t-2 border-on-surface/40 pt-4 mb-6">
-                <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-on-surface mb-2">
-                  KEY HIGHLIGHTS:
-                </h4>
-                <ul className="space-y-1">
-                  {project2.features?.slice(0, 3).map((f, i) => (
-                    <li key={i} className="flex items-center gap-2 text-xs font-semibold text-on-surface">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-on-surface shrink-0" />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-3 border-t-3 border-on-surface pt-4">
-              {project2.liveUrl && (
-                <a
-                  href={project2.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-surface text-on-surface font-sans font-bold text-xs uppercase px-5 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
-                >
-                  <span>LIVE DEMO</span>
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </a>
-              )}
-              {project2.githubUrl && (
-                <a
-                  href={project2.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-secondary-container text-on-surface font-sans font-bold text-xs uppercase px-5 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
-                >
-                  <Github className="h-3.5 w-3.5" />
-                  <span>REPOSITORIES</span>
-                </a>
-              )}
-            </div>
-          </div>
-
-        </div>
-
-        {/* Featured Project 3: Maya Voice AI */}
-        <div className="bg-surface-container-high p-6 md:p-8 brutalist-border brutalist-shadow">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            <div className="lg:col-span-8">
-              <div className="flex justify-between items-start mb-4">
-                <span className="font-sans text-xs font-black uppercase tracking-wider bg-tertiary text-on-tertiary px-3 py-1 brutalist-border">
-                  {project3.badge || "VOICE & NLP"}
-                </span>
-                <span className="font-mono text-xs font-bold text-on-surface">03 // PYTHON NLP</span>
-              </div>
-
-              <h3 className="font-display font-black text-3xl md:text-4xl text-on-surface mb-2">
-                {project3.title}
-              </h3>
-              <p className="font-display font-bold text-sm text-secondary uppercase mb-4">
-                {project3.subtitle}
-              </p>
-              <p className="font-sans text-sm text-on-surface mb-6 leading-relaxed max-w-2xl">
-                {project3.description}
-              </p>
-
-              <div className="flex flex-wrap gap-2">
-                {project3.techStack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="font-sans text-xs font-bold bg-surface text-on-surface px-3 py-1 brutalist-border"
-                  >
-                    #{tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-between gap-4 border-t-3 lg:border-t-0 lg:border-l-3 border-on-surface pt-6 lg:pt-0 lg:pl-8">
-              <button
-                onClick={() => setDrawerOpen(true)}
-                className="w-full bg-primary-container text-on-primary-container font-sans font-bold text-xs uppercase px-6 py-4 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center justify-center gap-2 cursor-pointer mb-2"
-              >
-                <Layers className="h-4 w-4" />
-                <span>EXPLORE ALL PROJECTS ({projectsData.length})</span>
-              </button>
-
-              <div className="flex flex-wrap gap-2 w-full justify-end">
-                {project3.liveUrl && (
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3 border-t-3 border-on-surface pt-4">
+                {project1.liveUrl && (
                   <a
-                    href={project3.liveUrl}
+                    href={project1.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-surface text-on-surface font-sans font-bold text-xs uppercase px-4 py-2.5 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
+                    className="bg-surface text-on-surface font-sans font-bold text-xs uppercase px-5 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
                   >
                     <span>LIVE DEMO</span>
                     <ExternalLink className="h-3.5 w-3.5" />
                   </a>
                 )}
-                {project3.githubUrl && (
+                {project1.githubUrl && (
                   <a
-                    href={project3.githubUrl}
+                    href={project1.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-secondary-container text-on-surface font-sans font-bold text-xs uppercase px-4 py-2.5 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
+                    className="bg-secondary-container text-on-surface font-sans font-bold text-xs uppercase px-5 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
                   >
                     <Github className="h-3.5 w-3.5" />
-                    <span>GITHUB</span>
+                    <span>REPOSITORIES</span>
                   </a>
                 )}
               </div>
             </div>
+          )}
 
-          </div>
+          {/* Featured Project 2 */}
+          {project2 && (
+            <div className="bg-tertiary-container p-6 md:p-8 brutalist-border brutalist-shadow flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between items-start mb-6">
+                  <span className="font-sans text-xs font-black uppercase tracking-wider bg-surface px-3 py-1 brutalist-border text-on-surface">
+                    {project2.badge || "AI PLATFORM"}
+                  </span>
+                  <span className="font-mono text-xs font-bold text-on-surface">02 // ARCHITECTURE</span>
+                </div>
+
+                <h3 className="font-display font-black text-3xl md:text-4xl text-on-surface mb-2">
+                  {project2.title}
+                </h3>
+                {project2.subtitle && (
+                  <p className="font-display font-bold text-sm text-secondary uppercase mb-4">
+                    {project2.subtitle}
+                  </p>
+                )}
+                <p className="font-sans text-sm text-on-surface mb-6 leading-relaxed">
+                  {project2.description}
+                </p>
+
+                {/* Tech Stack Pills */}
+                {project2.techStack && project2.techStack.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {project2.techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="font-sans text-xs font-bold bg-surface text-on-surface px-3 py-1 brutalist-border"
+                      >
+                        #{tech}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Feature Highlights */}
+                {project2.features && project2.features.length > 0 && (
+                  <div className="border-t-2 border-on-surface/40 pt-4 mb-6">
+                    <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-on-surface mb-2">
+                      KEY HIGHLIGHTS:
+                    </h4>
+                    <ul className="space-y-1">
+                      {project2.features.slice(0, 3).map((f, i) => (
+                        <li key={i} className="flex items-center gap-2 text-xs font-semibold text-on-surface">
+                          <CheckCircle2 className="h-3.5 w-3.5 text-on-surface shrink-0" />
+                          <span>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3 border-t-3 border-on-surface pt-4">
+                {project2.liveUrl && (
+                  <a
+                    href={project2.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-surface text-on-surface font-sans font-bold text-xs uppercase px-5 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
+                  >
+                    <span>LIVE DEMO</span>
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                )}
+                {project2.githubUrl && (
+                  <a
+                    href={project2.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-secondary-container text-on-surface font-sans font-bold text-xs uppercase px-5 py-3 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
+                  >
+                    <Github className="h-3.5 w-3.5" />
+                    <span>REPOSITORIES</span>
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
         </div>
+
+        {/* Featured Project 3 */}
+        {project3 && (
+          <div className="bg-surface-container-high p-6 md:p-8 brutalist-border brutalist-shadow">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              
+              <div className="lg:col-span-8">
+                <div className="flex justify-between items-start mb-4">
+                  <span className="font-sans text-xs font-black uppercase tracking-wider bg-tertiary text-on-tertiary px-3 py-1 brutalist-border">
+                    {project3.badge || "FEATURED BUILD"}
+                  </span>
+                  <span className="font-mono text-xs font-bold text-on-surface">03 // PRODUCTION</span>
+                </div>
+
+                <h3 className="font-display font-black text-3xl md:text-4xl text-on-surface mb-2">
+                  {project3.title}
+                </h3>
+                {project3.subtitle && (
+                  <p className="font-display font-bold text-sm text-secondary uppercase mb-4">
+                    {project3.subtitle}
+                  </p>
+                )}
+                <p className="font-sans text-sm text-on-surface mb-6 leading-relaxed max-w-2xl">
+                  {project3.description}
+                </p>
+
+                {project3.techStack && project3.techStack.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {project3.techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="font-sans text-xs font-bold bg-surface text-on-surface px-3 py-1 brutalist-border"
+                      >
+                        #{tech}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-between gap-4 border-t-3 lg:border-t-0 lg:border-l-3 border-on-surface pt-6 lg:pt-0 lg:pl-8">
+                <button
+                  onClick={() => setDrawerOpen(true)}
+                  className="w-full bg-primary-container text-on-primary-container font-sans font-bold text-xs uppercase px-6 py-4 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center justify-center gap-2 cursor-pointer mb-2"
+                >
+                  <Layers className="h-4 w-4" />
+                  <span>EXPLORE ALL PROJECTS ({projects.length})</span>
+                </button>
+
+                <div className="flex flex-wrap gap-2 w-full justify-end">
+                  {project3.liveUrl && (
+                    <a
+                      href={project3.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-surface text-on-surface font-sans font-bold text-xs uppercase px-4 py-2.5 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
+                    >
+                      <span>LIVE DEMO</span>
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </a>
+                  )}
+                  {project3.githubUrl && (
+                    <a
+                      href={project3.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-secondary-container text-on-surface font-sans font-bold text-xs uppercase px-4 py-2.5 brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center gap-2 cursor-pointer"
+                    >
+                      <Github className="h-3.5 w-3.5" />
+                      <span>GITHUB</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
 
       </div>
 
       {/* Side-Scrolling Gallery Drawer for All Non-Featured Projects */}
-      <AllProjectsDrawer open={drawerOpen} onOpenChange={setDrawerOpen} />
+      <AllProjectsDrawer open={drawerOpen} onOpenChange={setDrawerOpen} projects={projects} />
     </section>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowUpRight, Mail, Send, CheckCircle2, Copy, Check, Loader2, AlertCircle, FileText } from "lucide-react";
 import { personalData } from "@/constants/personal";
 import { RevealOnScroll } from "@/components/shared/RevealOnScroll";
@@ -18,12 +18,33 @@ export function Contact() {
   const [copied, setCopied] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  
+  const [contactInfo, setContactInfo] = useState({
+    email: personalData.contact.email,
+    phone: personalData.contact.phone,
+    resumeUrl: personalData.contact.resumeUrl,
+  });
+
+  useEffect(() => {
+    fetch("/api/profile")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.profile) {
+          setContactInfo((prev) => ({
+            email: data.profile.email || prev.email,
+            phone: data.profile.phone || prev.phone,
+            resumeUrl: data.profile.resumeUrl || prev.resumeUrl,
+          }));
+        }
+      })
+      .catch((err) => console.warn("Failed to load contact info from profile API", err));
+  }, []);
 
   /**
    * Copies email address to system clipboard with user feedback
    */
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText(personalData.contact.email);
+    navigator.clipboard.writeText(contactInfo.email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
@@ -83,8 +104,8 @@ export function Contact() {
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
-              href={`mailto:${personalData.contact.email}`}
-              aria-label={`Send email to ${personalData.contact.email}`}
+              href={`mailto:${contactInfo.email}`}
+              aria-label={`Send email to ${contactInfo.email}`}
               className="inline-flex items-center gap-3 bg-surface text-on-surface px-8 py-4 brutalist-border brutalist-shadow font-display font-black text-lg uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
             >
               <span>HIRE ME NOW</span>
@@ -92,15 +113,15 @@ export function Contact() {
             </a>
 
             <a
-              href={`tel:${personalData.contact.phone}`}
-              aria-label={`Call ${personalData.contact.phone}`}
+              href={`tel:${contactInfo.phone}`}
+              aria-label={`Call ${contactInfo.phone}`}
               className="inline-flex items-center gap-2 bg-emerald-400 text-[#18181B] px-6 py-4 brutalist-border brutalist-shadow font-display font-bold text-sm uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
             >
-              <span>CALL: {personalData.contact.phone}</span>
+              <span>CALL: {contactInfo.phone}</span>
             </a>
 
             <a
-              href={personalData.contact.resumeUrl}
+              href={contactInfo.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="View Resume PDF"
@@ -139,15 +160,15 @@ export function Contact() {
           </h3>
           <p className="font-sans text-sm text-on-surface/80 mb-8">
             Have a project in mind or an open role? Call me at{" "}
-            <a href={`tel:${personalData.contact.phone}`} className="font-bold underline text-primary">
-              {personalData.contact.phone}
+            <a href={`tel:${contactInfo.phone}`} className="font-bold underline text-primary">
+              {contactInfo.phone}
             </a>{" "}
             or email directly at{" "}
             <a
-              href={`mailto:${personalData.contact.email}`}
+              href={`mailto:${contactInfo.email}`}
               className="font-bold underline text-primary focus-visible:outline-none"
             >
-              {personalData.contact.email}
+              {contactInfo.email}
             </a>
           </p>
 

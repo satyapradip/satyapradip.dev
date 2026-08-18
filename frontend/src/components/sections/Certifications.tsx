@@ -1,10 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Award, ShieldCheck, CheckCircle } from "lucide-react";
 import { certificationsData } from "@/constants/certifications";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { RevealOnScroll } from "@/components/shared/RevealOnScroll";
+
+interface CertificationItem {
+  id?: string;
+  title: string;
+  issuer: string;
+  credentialUrl?: string | null;
+}
 
 /**
  * Certifications Component
@@ -13,6 +20,21 @@ import { RevealOnScroll } from "@/components/shared/RevealOnScroll";
  * cloud architecture, and software engineering.
  */
 export function Certifications() {
+  const [certs, setCerts] = useState<CertificationItem[]>(certificationsData);
+
+  useEffect(() => {
+    fetch("/api/academic")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.certifications) && data.certifications.length > 0) {
+          setCerts(data.certifications);
+        }
+      })
+      .catch((err) => {
+        console.warn("Failed to fetch certifications from API, using fallback:", err);
+      });
+  }, []);
+
   return (
     <section id="certifications" className="py-16 md:py-24 w-full max-w-360 mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
       {/* Section Header */}
@@ -22,8 +44,8 @@ export function Certifications() {
 
       {/* Certifications Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        {certificationsData.map((cert, index) => (
-          <RevealOnScroll key={cert.id} direction="up" delay={index * 100}>
+        {certs.map((cert, index) => (
+          <RevealOnScroll key={cert.id || index} direction="up" delay={index * 100}>
             <div className="bg-surface p-6 brutalist-border brutalist-shadow brutalist-shadow-hover flex items-start gap-4 h-full">
               {/* Badge Icon */}
               <div className="p-3 bg-primary-container brutalist-border shrink-0">
@@ -43,6 +65,16 @@ export function Certifications() {
                 <p className="font-sans text-xs font-bold text-secondary uppercase mt-1">
                   ISSUED BY: {cert.issuer}
                 </p>
+                {cert.credentialUrl && (
+                  <a
+                    href={cert.credentialUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block font-sans text-[11px] font-bold text-primary underline mt-2 hover:opacity-80"
+                  >
+                    View Credential →
+                  </a>
+                )}
               </div>
             </div>
           </RevealOnScroll>

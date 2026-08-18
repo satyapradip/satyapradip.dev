@@ -9,8 +9,10 @@ import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 
 export function About() {
   const [bio, setBio] = useState<string>(personalData.bio);
+  const [stats, setStats] = useState(personalData.stats);
 
   useEffect(() => {
+    // 1. Fetch Profile Bio
     fetch("/api/profile")
       .then((res) => res.json())
       .then((data) => {
@@ -18,7 +20,23 @@ export function About() {
           setBio(data.profile.bio);
         }
       })
-      .catch((err) => console.error("Failed to load profile in About component", err));
+      .catch((err) => console.warn("Failed to load profile in About component", err));
+
+    // 2. Fetch Live Stats
+    fetch("/api/stats")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.stats) {
+          setStats((prev) => ({
+            ...prev,
+            projectsCompleted: data.stats.projectsCompleted ?? prev.projectsCompleted,
+            technologiesCount: data.stats.technologiesCount ?? prev.technologiesCount,
+            cgpa: data.stats.cgpa ?? prev.cgpa,
+            experienceYears: data.stats.experienceYears ?? prev.experienceYears,
+          }));
+        }
+      })
+      .catch((err) => console.warn("Failed to load stats in About component", err));
   }, []);
 
   return (
@@ -75,7 +93,7 @@ export function About() {
             <div className="bg-secondary-container p-6 brutalist-border brutalist-shadow text-center">
               <Briefcase className="h-8 w-8 text-on-surface mx-auto mb-2" />
               <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
-                <AnimatedCounter value={personalData.stats.experienceYears} />
+                <AnimatedCounter value={stats.experienceYears} />
               </div>
               <p className="font-sans font-bold text-[#18181B] text-xs uppercase tracking-wider mt-1">
                 YEARS EXPERIENCE
@@ -86,7 +104,7 @@ export function About() {
             <div className="bg-primary-container p-6 brutalist-border brutalist-shadow text-center">
               <Code2 className="h-8 w-8 text-on-surface mx-auto mb-2" />
               <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
-                <AnimatedCounter value={personalData.stats.projectsCompleted} />
+                <AnimatedCounter value={stats.projectsCompleted} />
               </div>
               <p className="font-sans font-bold text-[#18181B] text-xs uppercase tracking-wider mt-1">
                 PROJECTS BUILT
@@ -97,7 +115,7 @@ export function About() {
             <div className="bg-tertiary-container p-6 brutalist-border brutalist-shadow text-center">
               <Award className="h-8 w-8 text-on-surface mx-auto mb-2" />
               <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
-                <AnimatedCounter value={personalData.stats.technologiesCount} />
+                <AnimatedCounter value={stats.technologiesCount} />
               </div>
               <p className="font-sans font-bold text-[#18181B] text-xs uppercase tracking-wider mt-1">
                 TECH STACK TOOLS
@@ -108,7 +126,7 @@ export function About() {
             <div className="bg-surface-container-high p-6 brutalist-border brutalist-shadow text-center">
               <GraduationCap className="h-8 w-8 text-on-surface mx-auto mb-2" />
               <div className="font-display font-black text-3xl md:text-4xl text-on-surface">
-                <AnimatedCounter value={personalData.stats.cgpa} />
+                <AnimatedCounter value={stats.cgpa} />
               </div>
               <p className="font-sans font-bold text-[#18181B] text-xs uppercase tracking-wider mt-1">
                 OVERALL CGPA

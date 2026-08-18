@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface AnimatedCounterProps {
-  value?: string;
+  value?: string | number;
   target?: number;
   prefix?: string;
   suffix?: string;
@@ -26,8 +26,8 @@ export function AnimatedCounter({
   label,
   className,
 }: AnimatedCounterProps) {
-  // Safely derive full string representation to avoid undefined access
-  const strVal = value ?? `${prefix}${target ?? 0}${suffix}`;
+  // Safely derive string representation
+  const strVal = value !== undefined && value !== null ? String(value) : `${prefix}${target ?? 0}${suffix}`;
 
   const [displayValue, setDisplayValue] = useState("0");
   const ref = useRef<HTMLDivElement>(null);
@@ -35,7 +35,7 @@ export function AnimatedCounter({
 
   useEffect(() => {
     // Safely extract numeric value and symbols
-    const safeStr = strVal || "0";
+    const safeStr = String(strVal || "0");
     const numericPart = target ?? (parseFloat(safeStr.replace(/[^0-9.]/g, "")) || 0);
     const parsedPrefix = prefix || (safeStr.match(/^[^\d]*/)?.[0] || "");
     const parsedSuffix = suffix || (safeStr.match(/[^\d.]*$/)?.[0] || "");

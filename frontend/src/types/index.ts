@@ -60,6 +60,8 @@ export interface ExperienceItem {
   caseStudyUrl?: string;
 }
 
+export type Experience = ExperienceItem;
+
 export interface EducationItem {
   institution: string;
   degree: string;

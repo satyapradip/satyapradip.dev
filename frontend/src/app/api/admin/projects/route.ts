@@ -2,15 +2,39 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { projectsData as fallbackProjects } from "@/constants/projects";
 
+async function ensureProjectsSeeded() {
+  const count = await prisma.project.count().catch(() => 0);
+  if (count === 0) {
+    for (let i = 0; i < fallbackProjects.length; i++) {
+      const p = fallbackProjects[i];
+      await prisma.project.create({
+        data: {
+          title: p.title,
+          subtitle: p.subtitle,
+          description: p.description,
+          badge: p.badge || null,
+          techStack: p.techStack || [],
+          features: p.features || [],
+          liveUrl: p.liveUrl || null,
+          githubUrl: p.githubUrl || null,
+          imageUrl: p.imageUrl || p.image || null,
+          featured: p.featured ?? (p.variant === "featured" || i < 3),
+          order: p.order ?? i,
+        },
+      }).catch((e) => console.warn("Failed to seed project:", e));
+    }
+  }
+}
+
 export async function GET() {
   try {
+    await ensureProjectsSeeded();
     const list = await prisma.project.findMany({
       orderBy: { order: "asc" },
     });
     if (list.length > 0) {
       return NextResponse.json({ success: true, projects: list });
     }
-    // Transform fallback constants to include string ID
     const formattedFallback = fallbackProjects.map((p, idx) => ({
       id: `fallback-${p.id}`,
       title: p.title,
@@ -22,7 +46,7 @@ export async function GET() {
       liveUrl: p.liveUrl || null,
       githubUrl: p.githubUrl || null,
       imageUrl: p.imageUrl || p.image || null,
-      featured: p.featured ?? (p.variant === "featured"),
+      featured: p.featured ?? (p.variant === "featured" || idx < 3),
       order: p.order ?? idx,
     }));
     return NextResponse.json({ success: true, projects: formattedFallback });
@@ -38,7 +62,7 @@ export async function GET() {
       liveUrl: p.liveUrl || null,
       githubUrl: p.githubUrl || null,
       imageUrl: p.imageUrl || p.image || null,
-      featured: p.featured ?? (p.variant === "featured"),
+      featured: p.featured ?? (p.variant === "featured" || idx < 3),
       order: p.order ?? idx,
     }));
     return NextResponse.json({ success: true, projects: formattedFallback });
@@ -47,6 +71,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    await ensureProjectsSeeded();
     const body = await req.json();
     const { title, subtitle, description, badge, techStack, features, liveUrl, githubUrl, imageUrl, featured, order } = body;
 
@@ -62,7 +87,7 @@ export async function POST(req: Request) {
         githubUrl: githubUrl || null,
         imageUrl: imageUrl || null,
         featured: Boolean(featured),
-        order: order || 0,
+        order: Number(order) || 0,
       },
     });
 
@@ -74,11 +99,32 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
+    await ensureProjectsSeeded();
     const body = await req.json();
     const { id, title, subtitle, description, badge, techStack, features, liveUrl, githubUrl, imageUrl, featured, order } = body;
 
     if (!id || id.startsWith("fallback-")) {
-      // Create new record in DB if updating a fallback item
+      const existing = await prisma.project.findFirst({ where: { title } });
+      if (existing) {
+        const updated = await prisma.project.update({
+          where: { id: existing.id },
+          data: {
+            title,
+            subtitle,
+            description,
+            badge: badge || null,
+            techStack: Array.isArray(techStack) ? techStack : [],
+            features: Array.isArray(features) ? features : [],
+            liveUrl: liveUrl || null,
+            githubUrl: githubUrl || null,
+            imageUrl: imageUrl || null,
+            featured: Boolean(featured),
+            order: Number(order) || 0,
+          },
+        });
+        return NextResponse.json({ success: true, project: updated });
+      }
+
       const created = await prisma.project.create({
         data: {
           title,
@@ -91,7 +137,7 @@ export async function PUT(req: Request) {
           githubUrl: githubUrl || null,
           imageUrl: imageUrl || null,
           featured: Boolean(featured),
-          order: order || 0,
+          order: Number(order) || 0,
         },
       });
       return NextResponse.json({ success: true, project: created });
@@ -110,7 +156,7 @@ export async function PUT(req: Request) {
         githubUrl: githubUrl || null,
         imageUrl: imageUrl || null,
         featured: Boolean(featured),
-        order: order || 0,
+        order: Number(order) || 0,
       },
     });
 
@@ -122,6 +168,7 @@ export async function PUT(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
+    await ensureProjectsSeeded();
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
 
@@ -131,6 +178,15 @@ export async function DELETE(req: Request) {
 
     if (!id.startsWith("fallback-")) {
       await prisma.project.delete({ where: { id } });
+    } else {
+      const fallbackId = id.replace("fallback-", "");
+      const fallbackItem = fallbackProjects.find((p) => p.id === fallbackId);
+      if (fallbackItem) {
+        const found = await prisma.project.findFirst({ where: { title: fallbackItem.title } });
+        if (found) {
+          await prisma.project.delete({ where: { id: found.id } });
+        }
+      }
     }
 
     return NextResponse.json({ success: true });

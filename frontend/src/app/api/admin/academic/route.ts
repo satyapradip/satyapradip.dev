@@ -3,8 +3,40 @@ import { prisma } from "@/lib/prisma";
 import { educationData as fallbackEducation } from "@/constants/education";
 import { certificationsData as fallbackCerts } from "@/constants/certifications";
 
+async function ensureAcademicSeeded() {
+  const [eduCount, certCount] = await Promise.all([
+    prisma.education.count().catch(() => 0),
+    prisma.certification.count().catch(() => 0),
+  ]);
+
+  if (eduCount === 0) {
+    await prisma.education.create({
+      data: {
+        institution: fallbackEducation.institution,
+        degree: fallbackEducation.degree,
+        cgpa: fallbackEducation.cgpa,
+        period: fallbackEducation.period,
+        highlights: fallbackEducation.highlights || [],
+      },
+    }).catch((e) => console.warn("Failed to seed education:", e));
+  }
+
+  if (certCount === 0) {
+    for (const cert of fallbackCerts) {
+      await prisma.certification.create({
+        data: {
+          title: cert.title,
+          issuer: cert.issuer,
+          credentialUrl: cert.credentialUrl || null,
+        },
+      }).catch((e) => console.warn("Failed to seed certification:", e));
+    }
+  }
+}
+
 export async function GET() {
   try {
+    await ensureAcademicSeeded();
     const [eduList, certList] = await Promise.all([
       prisma.education.findMany().catch(() => []),
       prisma.certification.findMany().catch(() => []),
@@ -60,6 +92,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    await ensureAcademicSeeded();
     const body = await req.json();
     const { type, ...itemData } = body;
 
@@ -93,6 +126,7 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
+    await ensureAcademicSeeded();
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     const type = searchParams.get("type");
@@ -106,6 +140,18 @@ export async function DELETE(req: Request) {
         await prisma.education.delete({ where: { id } });
       } else if (type === "certification") {
         await prisma.certification.delete({ where: { id } });
+      }
+    } else {
+      if (type === "education") {
+        const found = await prisma.education.findFirst({ where: { degree: fallbackEducation.degree } });
+        if (found) await prisma.education.delete({ where: { id: found.id } });
+      } else if (type === "certification") {
+        const idx = parseInt(id.replace("fallback-cert-", ""), 10);
+        const certItem = fallbackCerts[idx];
+        if (certItem) {
+          const found = await prisma.certification.findFirst({ where: { title: certItem.title } });
+          if (found) await prisma.certification.delete({ where: { id: found.id } });
+        }
       }
     }
 

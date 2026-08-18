@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ArrowUpRight, Mail, Send, CheckCircle2, Copy, Check, Loader2, AlertCircle, FileText } from "lucide-react";
+import { ArrowUpRight, Mail, Send, CheckCircle2, Copy, Check, Loader2, AlertCircle, FileText, Phone } from "lucide-react";
 import { personalData } from "@/constants/personal";
 import { RevealOnScroll } from "@/components/shared/RevealOnScroll";
 
@@ -102,52 +102,59 @@ export function Contact() {
             Let&apos;s architect a solution that scales. Stop dealing with technical debt and start shipping production features your users love.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <a
-              href={`mailto:${contactInfo.email}`}
-              aria-label={`Send email to ${contactInfo.email}`}
-              className="inline-flex items-center gap-3 bg-surface text-on-surface px-8 py-4 brutalist-border brutalist-shadow font-display font-black text-lg uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
-            >
-              <span>HIRE ME NOW</span>
-              <ArrowUpRight className="h-6 w-6 stroke-3" />
-            </a>
+          <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto">
+            {/* Primary Action Row */}
+            <div className="flex flex-wrap items-center justify-center gap-4 w-full">
+              <a
+                href={`mailto:${contactInfo.email}`}
+                aria-label={`Send email to ${contactInfo.email}`}
+                className="inline-flex items-center gap-3 bg-surface text-on-surface px-8 py-4 brutalist-border brutalist-shadow font-display font-black text-lg uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
+              >
+                <span>HIRE ME NOW</span>
+                <ArrowUpRight className="h-6 w-6 stroke-3" />
+              </a>
 
-            <a
-              href={`tel:${contactInfo.phone}`}
-              aria-label={`Call ${contactInfo.phone}`}
-              className="inline-flex items-center gap-2 bg-emerald-400 text-[#18181B] px-6 py-4 brutalist-border brutalist-shadow font-display font-bold text-sm uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
-            >
-              <span>CALL: {contactInfo.phone}</span>
-            </a>
+              <a
+                href={contactInfo.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View Resume PDF"
+                className="inline-flex items-center gap-2 bg-primary-container text-on-primary-container px-7 py-4 brutalist-border brutalist-shadow font-display font-bold text-sm uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
+              >
+                <FileText className="h-5 w-5 stroke-[2.5]" />
+                <span>VIEW RESUME</span>
+              </a>
+            </div>
 
-            <a
-              href={contactInfo.resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="View Resume PDF"
-              className="inline-flex items-center gap-2 bg-primary-container text-on-primary-container px-6 py-4 brutalist-border brutalist-shadow font-display font-bold text-sm uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
-            >
-              <FileText className="h-5 w-5 stroke-[2.5]" />
-              <span>VIEW RESUME</span>
-            </a>
+            {/* Secondary Action Row */}
+            <div className="flex flex-wrap items-center justify-center gap-3 w-full">
+              <a
+                href={`tel:${contactInfo.phone}`}
+                aria-label={`Call ${contactInfo.phone}`}
+                className="inline-flex items-center gap-2 bg-emerald-400 text-[#18181B] px-5 py-3 brutalist-border brutalist-shadow font-display font-bold text-xs uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
+              >
+                <Phone className="h-4 w-4" />
+                <span>CALL: {contactInfo.phone}</span>
+              </a>
 
-            <button
-              onClick={handleCopyEmail}
-              aria-label="Copy email address to clipboard"
-              className="inline-flex items-center gap-2 bg-secondary-container text-on-surface px-6 py-4 brutalist-border brutalist-shadow font-display font-bold text-sm uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
-            >
-              {copied ? (
-                <>
-                  <Check className="h-5 w-5 text-secondary stroke-3" />
-                  <span>COPIED!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="h-5 w-5 stroke-[2.5]" />
-                  <span>COPY EMAIL</span>
-                </>
-              )}
-            </button>
+              <button
+                onClick={handleCopyEmail}
+                aria-label="Copy email address to clipboard"
+                className="inline-flex items-center gap-2 bg-secondary-container text-on-surface px-5 py-3 brutalist-border brutalist-shadow font-display font-bold text-xs uppercase hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
+              >
+                {copied ? (
+                  <>
+                    <Check className="h-4 w-4 text-secondary stroke-3" />
+                    <span>COPIED!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-4 w-4 stroke-[2.5]" />
+                    <span>COPY EMAIL</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </RevealOnScroll>
       </section>

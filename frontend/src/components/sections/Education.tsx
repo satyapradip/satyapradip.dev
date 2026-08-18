@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { educationData } from "@/constants/education";
-import { certificationsData } from "@/constants/certifications";
+import { GraduationCap, BookOpen, CheckCircle2 } from "lucide-react";
 
 interface EducationItem {
   id?: string;
@@ -13,28 +13,24 @@ interface EducationItem {
   highlights?: string[];
 }
 
-interface CertificationItem {
-  id?: string;
-  title: string;
-  issuer: string;
-  credentialUrl?: string | null;
-}
+const coreCoursework = [
+  "Data Structures & Algorithms",
+  "Artificial Intelligence & Machine Learning",
+  "Database Management Systems (SQL & NoSQL)",
+  "Operating Systems & Computer Networks",
+  "Object-Oriented Programming (OOPs)",
+  "Full-Stack Web Architecture & Cloud Systems",
+];
 
 export function Education() {
   const [edu, setEdu] = useState<EducationItem>(educationData);
-  const [certs, setCerts] = useState<CertificationItem[]>(certificationsData);
 
   useEffect(() => {
     fetch("/api/academic")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success) {
-          if (Array.isArray(data.education) && data.education.length > 0) {
-            setEdu(data.education[0]);
-          }
-          if (Array.isArray(data.certifications) && data.certifications.length > 0) {
-            setCerts(data.certifications);
-          }
+        if (data.success && Array.isArray(data.education) && data.education.length > 0) {
+          setEdu(data.education[0]);
         }
       })
       .catch((err) => {
@@ -48,6 +44,9 @@ export function Education() {
         
         {/* Left Column: Title & Rotated SGPA Badge */}
         <div className="lg:col-span-4 flex flex-col justify-center">
+          <span className="font-sans text-xs font-black uppercase tracking-wider bg-primary-container text-on-primary-container px-3 py-1 brutalist-border inline-block self-start mb-3">
+            HIGHER EDUCATION
+          </span>
           <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl leading-none mb-8 text-surface tracking-tight">
             ACADEMIC<br />TRACK<br />RECORD
           </h2>
@@ -56,20 +55,23 @@ export function Education() {
               {edu.cgpa || educationData.cgpa}
             </p>
             <p className="font-sans font-bold text-xs md:text-sm uppercase tracking-wider">
-              AVERAGE SGPA / CGPA
+              CUMULATIVE CGPA / 10
             </p>
           </div>
         </div>
 
-        {/* Right Column: University & Certifications Cards */}
+        {/* Right Column: University & Coursework Cards */}
         <div className="lg:col-span-8 space-y-8">
           
-          {/* Education Card */}
+          {/* Degree & University Card */}
           <div className="bg-surface text-on-surface p-8 md:p-10 brutalist-border brutalist-shadow-sm flex flex-col md:flex-row gap-6 items-start">
             <div className="w-16 h-16 rounded-full bg-secondary text-on-secondary flex items-center justify-center shrink-0 font-display font-black text-xl border-2 border-on-surface">
-              ED
+              <GraduationCap className="h-8 w-8 text-on-secondary" />
             </div>
             <div>
+              <span className="font-sans font-bold text-xs uppercase px-2.5 py-1 bg-secondary-container text-on-surface brutalist-border inline-block mb-3">
+                BACHELOR OF TECHNOLOGY
+              </span>
               <h4 className="font-display font-black text-xl md:text-2xl uppercase mb-2 text-on-surface">
                 {edu.institution || educationData.institution}
               </h4>
@@ -77,32 +79,33 @@ export function Education() {
                 {edu.degree || educationData.degree}
               </p>
               <p className="font-sans text-sm text-on-surface/80 mb-4">
-                {edu.period || educationData.period} | Current SGPA: {edu.cgpa || educationData.cgpa}/10
+                {edu.period || educationData.period} | Overall Score: <span className="font-bold text-on-surface">{edu.cgpa || educationData.cgpa} / 10 CGPA</span>
               </p>
               <p className="font-sans text-sm text-on-surface/80 italic border-l-4 border-secondary-container pl-4 py-1">
-                Specialization in Artificial Intelligence and Machine Learning with consistent academic top rank.
+                Specialization in Artificial Intelligence & Machine Learning with consistent top academic standing.
               </p>
             </div>
           </div>
 
-          {/* Certifications Card */}
+          {/* Academic Coursework & Disciplines Card */}
           <div className="bg-surface text-on-surface p-8 md:p-10 brutalist-border brutalist-shadow-sm flex flex-col md:flex-row gap-6 items-start">
             <div className="w-16 h-16 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center shrink-0 font-display font-black text-xl border-2 border-on-surface">
-              CE
+              <BookOpen className="h-8 w-8 text-on-tertiary" />
             </div>
             <div className="w-full">
-              <h4 className="font-display font-black text-xl md:text-2xl uppercase mb-6 text-on-surface">
-                CERTIFICATIONS & TRAININGS
+              <h4 className="font-display font-black text-xl md:text-2xl uppercase mb-2 text-on-surface">
+                CORE COMPUTER SCIENCE COURSEWORK
               </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {certs.map((cert, index) => (
-                  <div key={cert.id || index} className="p-4 bg-surface-container-low brutalist-border">
-                    <p className="font-sans font-bold text-xs text-primary uppercase mb-1">
-                      {cert.issuer}
-                    </p>
-                    <p className="font-sans font-bold text-sm uppercase text-on-surface">
-                      {cert.title}
-                    </p>
+              <p className="font-sans text-xs text-secondary uppercase font-bold tracking-wider mb-6">
+                THEORETICAL FOUNDATIONS & PRACTICAL APPLICATION
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {coreCoursework.map((course, index) => (
+                  <div key={index} className="p-3.5 bg-surface-container-low brutalist-border flex items-center gap-2.5">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span className="font-sans font-bold text-xs uppercase text-on-surface">
+                      {course}
+                    </span>
                   </div>
                 ))}
               </div>

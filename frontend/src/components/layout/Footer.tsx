@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Github, Linkedin, Mail, Coffee, CheckCircle2 } from "lucide-react";
+import { Github, Linkedin, Mail, CheckCircle2, Code2, Cpu } from "lucide-react";
 import { personalData } from "@/constants/personal";
 
 export function Footer() {
@@ -16,11 +16,11 @@ export function Footer() {
             SATYAPRADIP<span className="text-primary-container">.</span>
           </Link>
           <p className="font-sans text-sm text-surface-variant max-w-xs mb-8 leading-relaxed">
-            A full-stack developer building robust, scalable digital platforms and web applications based in Kolkata.
+            Full-Stack Developer & AI Engineer building high-performance web applications and resilient backend systems.
           </p>
           <div className="flex items-center gap-3 text-primary-container font-sans font-bold text-xs uppercase tracking-wider">
             <span className="w-3 h-3 bg-secondary-container rounded-full animate-pulse" />
-            <span>OPEN FOR OFFERS</span>
+            <span>OPEN FOR ROLES & CONTRACTS</span>
           </div>
         </div>
 
@@ -32,17 +32,17 @@ export function Footer() {
           <ul className="space-y-3 font-sans text-sm">
             <li>
               <a className="text-surface-variant hover:text-primary-container transition-colors" href="#skills">
-                Skills
+                Skills & Stack
               </a>
             </li>
             <li>
               <a className="text-surface-variant hover:text-primary-container transition-colors" href="#projects">
-                Projects
+                Featured Projects
               </a>
             </li>
             <li>
               <a className="text-surface-variant hover:text-primary-container transition-colors" href="#process">
-                Process
+                Engineering Philosophy
               </a>
             </li>
             <li>
@@ -52,51 +52,68 @@ export function Footer() {
             </li>
             <li>
               <a className="text-surface-variant hover:text-primary-container transition-colors" href="#contact">
-                Contact
+                Contact & Hire
               </a>
             </li>
           </ul>
         </div>
 
-        {/* Column 3: Buy Me A Coffee Button */}
+        {/* Column 3: Core Specializations */}
         <div>
           <h4 className="font-sans font-bold text-xs uppercase text-primary-container mb-6 tracking-widest">
-            SUPPORT
+            CORE DOMAINS
           </h4>
-          <button className="bg-primary-container text-on-primary-container p-4 brutalist-border border-surface brutalist-shadow-sm flex items-center gap-3 font-sans font-bold text-xs uppercase hover:translate-y-1 hover:shadow-none transition-all">
-            <Coffee className="h-5 w-5 stroke-[2.5]" />
-            <span>BUY ME A COFFEE</span>
-          </button>
+          <ul className="space-y-2.5 font-sans text-sm text-surface-variant">
+            <li className="flex items-center gap-2">
+              <Code2 className="h-3.5 w-3.5 text-primary-container shrink-0" />
+              <span>Full-Stack MERN & Next.js</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <Cpu className="h-3.5 w-3.5 text-primary-container shrink-0" />
+              <span>AI / ML & LLM Integrations</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <CheckCircle2 className="h-3.5 w-3.5 text-primary-container shrink-0" />
+              <span>Relational & NoSQL Databases</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <CheckCircle2 className="h-3.5 w-3.5 text-primary-container shrink-0" />
+              <span>AWS Cloud & Docker CI/CD</span>
+            </li>
+          </ul>
         </div>
 
         {/* Column 4: Social Icons */}
         <div>
           <h4 className="font-sans font-bold text-xs uppercase text-primary-container mb-6 tracking-widest">
-            SOCIALS
+            CONNECT
           </h4>
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <a
-              className="w-12 h-12 brutalist-border border-surface flex items-center justify-center hover:bg-surface hover:text-on-surface transition-all"
+              className="w-12 h-12 brutalist-border border-surface flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-all"
               href={personalData.contact.github}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub Profile"
+              title="GitHub"
             >
               <Github className="h-5 w-5" />
             </a>
             <a
-              className="w-12 h-12 brutalist-border border-surface flex items-center justify-center hover:bg-surface hover:text-on-surface transition-all"
+              className="w-12 h-12 brutalist-border border-surface flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-all"
               href={personalData.contact.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn Profile"
+              title="LinkedIn"
             >
               <Linkedin className="h-5 w-5" />
             </a>
             <a
-              className="w-12 h-12 brutalist-border border-surface flex items-center justify-center hover:bg-surface hover:text-on-surface transition-all"
+              className="w-12 h-12 brutalist-border border-surface flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-all"
               href={`mailto:${personalData.contact.email}`}
               aria-label="Send Email"
+              title="Email"
             >
               <Mail className="h-5 w-5" />
             </a>
@@ -118,7 +135,7 @@ export function Footer() {
             ADMIN PORTAL 🔒
           </Link>
           <div className="flex items-center gap-2">
-            <span className="font-sans font-bold text-xs uppercase tracking-widest">BUILD SOLID</span>
+            <span className="font-sans font-bold text-xs uppercase tracking-widest">PRODUCTION GRADE</span>
             <div className="w-8 h-8 bg-secondary-container brutalist-border border-surface rounded-full flex items-center justify-center">
               <CheckCircle2 className="h-4 w-4 text-on-surface stroke-[2.5]" />
             </div>

@@ -22,7 +22,7 @@ export const personalData: PersonalDetails = {
     email: "satyapradip7602@gmail.com",
     phone: "+91 7602629919",
     github: "https://github.com/satyapradip",
-    linkedin: "https://linkedin.com/in/satyapradip",
+    linkedin: "https://www.linkedin.com/in/satyapradip-das/",
     location: "Kolkata, India",
     resumeUrl: "/resume.pdf",
   },

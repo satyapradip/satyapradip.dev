@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, FileText } from "lucide-react";
+import { Menu, FileText, Github, Sparkles } from "lucide-react";
 import { personalData } from "@/constants/personal";
 import {
   Sheet,
@@ -15,6 +15,7 @@ import {
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [resumeUrl, setResumeUrl] = useState<string>(personalData.contact.resumeUrl);
+  const githubUrl = personalData.contact.github || "https://github.com/satyapradip";
 
   useEffect(() => {
     fetch("/api/profile")
@@ -69,7 +70,7 @@ export function Navbar() {
             className="font-sans font-bold text-xs uppercase tracking-wider text-on-surface hover:bg-secondary-container transition-colors duration-200 px-3 py-1.5 border-2 border-transparent hover:border-on-surface cursor-pointer"
             href="#process"
           >
-            PROCESS
+            PHILOSOPHY
           </a>
           <a
             className="font-sans font-bold text-xs uppercase tracking-wider text-on-surface hover:bg-secondary-container transition-colors duration-200 px-3 py-1.5 border-2 border-transparent hover:border-on-surface cursor-pointer"
@@ -79,8 +80,19 @@ export function Navbar() {
           </a>
         </div>
 
-        {/* Desktop Action Buttons: Resume + Hire Me */}
+        {/* Desktop Action Buttons: GitHub + Resume + Hire Me */}
         <div className="hidden md:flex items-center gap-3">
+          <a
+            href={githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub Profile"
+            className="p-2.5 bg-surface hover:bg-primary-container text-on-surface brutalist-border brutalist-shadow-sm brutalist-shadow-hover flex items-center justify-center cursor-pointer transition-colors"
+            title="GitHub Profile"
+          >
+            <Github className="h-4 w-4 stroke-[2.5]" />
+          </a>
+
           <a
             href={resumeUrl}
             target="_blank"
@@ -98,8 +110,19 @@ export function Navbar() {
           </a>
         </div>
 
-        {/* Mobile Hamburger Drawer */}
+        {/* Mobile Action Buttons & Hamburger */}
         <div className="md:hidden flex items-center gap-2">
+          <a
+            href={githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub Profile"
+            className="p-2 bg-surface hover:bg-primary-container text-on-surface brutalist-border brutalist-shadow-sm flex items-center justify-center cursor-pointer"
+            title="GitHub Profile"
+          >
+            <Github className="h-4 w-4" />
+          </a>
+
           <a
             href={resumeUrl}
             target="_blank"
@@ -124,64 +147,74 @@ export function Navbar() {
                 </SheetTitle>
               </SheetHeader>
 
-              <nav className="flex flex-col gap-3 my-6">
+              <nav className="flex flex-col gap-2.5 my-6">
                 <a
                   href="#about"
                   onClick={() => setMobileOpen(false)}
-                  className="font-display font-bold text-base p-2.5 brutalist-border bg-surface hover:bg-secondary-container transition-colors cursor-pointer"
+                  className="font-display font-bold text-sm p-2.5 brutalist-border bg-surface hover:bg-secondary-container transition-colors cursor-pointer"
                 >
                   ABOUT ME
                 </a>
                 <a
                   href="#skills"
                   onClick={() => setMobileOpen(false)}
-                  className="font-display font-bold text-base p-2.5 brutalist-border bg-surface hover:bg-secondary-container transition-colors cursor-pointer"
+                  className="font-display font-bold text-sm p-2.5 brutalist-border bg-surface hover:bg-secondary-container transition-colors cursor-pointer"
                 >
                   MY SKILLS
                 </a>
                 <a
                   href="#experience"
                   onClick={() => setMobileOpen(false)}
-                  className="font-display font-bold text-base p-2.5 brutalist-border bg-surface hover:bg-secondary-container transition-colors cursor-pointer"
+                  className="font-display font-bold text-sm p-2.5 brutalist-border bg-surface hover:bg-secondary-container transition-colors cursor-pointer"
                 >
                   EXPERIENCE
                 </a>
                 <a
                   href="#projects"
                   onClick={() => setMobileOpen(false)}
-                  className="font-display font-bold text-base p-2.5 brutalist-border bg-surface hover:bg-secondary-container transition-colors cursor-pointer"
+                  className="font-display font-bold text-sm p-2.5 brutalist-border bg-surface hover:bg-secondary-container transition-colors cursor-pointer"
                 >
                   FEATURED WORK
                 </a>
                 <a
                   href="#process"
                   onClick={() => setMobileOpen(false)}
-                  className="font-display font-bold text-base p-2.5 brutalist-border bg-surface hover:bg-secondary-container transition-colors cursor-pointer"
+                  className="font-display font-bold text-sm p-2.5 brutalist-border bg-surface hover:bg-secondary-container transition-colors cursor-pointer"
                 >
-                  MY PROCESS
+                  ENGINEERING PHILOSOPHY
                 </a>
                 <a
                   href="#academic"
                   onClick={() => setMobileOpen(false)}
-                  className="font-display font-bold text-base p-2.5 brutalist-border bg-surface hover:bg-secondary-container transition-colors cursor-pointer"
+                  className="font-display font-bold text-sm p-2.5 brutalist-border bg-surface hover:bg-secondary-container transition-colors cursor-pointer"
                 >
                   ACADEMIC RECORD
                 </a>
               </nav>
 
-              <div className="pt-4 border-t-3 border-on-surface space-y-3">
-                <a
-                  href={resumeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <button className="w-full font-display font-bold text-sm uppercase bg-primary-container text-on-primary-container brutalist-border p-3 brutalist-shadow flex items-center justify-center gap-2 cursor-pointer mb-2">
-                    <FileText className="h-4 w-4" /> VIEW RESUME
-                  </button>
-                </a>
+              <div className="pt-4 border-t-3 border-on-surface space-y-2.5">
+                <div className="grid grid-cols-2 gap-2">
+                  <a
+                    href={githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileOpen(false)}
+                    className="font-display font-bold text-xs uppercase bg-surface text-on-surface brutalist-border p-2.5 brutalist-shadow flex items-center justify-center gap-1.5 cursor-pointer hover:bg-primary-container transition-colors"
+                  >
+                    <Github className="h-3.5 w-3.5" /> GITHUB
+                  </a>
+                  <a
+                    href={resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileOpen(false)}
+                    className="font-display font-bold text-xs uppercase bg-primary-container text-on-primary-container brutalist-border p-2.5 brutalist-shadow flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <FileText className="h-3.5 w-3.5" /> RESUME
+                  </a>
+                </div>
                 <a href="#contact" onClick={() => setMobileOpen(false)}>
-                  <button className="w-full font-display font-bold text-sm uppercase bg-tertiary text-on-tertiary brutalist-border p-3.5 brutalist-shadow cursor-pointer">
+                  <button className="w-full font-display font-bold text-sm uppercase bg-tertiary text-on-tertiary brutalist-border p-3 brutalist-shadow cursor-pointer">
                     HIRE ME NOW
                   </button>
                 </a>
